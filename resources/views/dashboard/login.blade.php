@@ -35,7 +35,7 @@
     <div class="layout-login__form bg-white" data-perfect-scrollbar>
         <div class="d-flex justify-content-center mt-2 mb-5 navbar-light">
             <a href="{{ route('dashboard.index') }}" class="navbar-brand" style="min-width: 0">
-                <img class="navbar-brand-icon" src="{{ asset('dashboard/images/stack-logo-blue.svg') }}" width="25" alt="Stack">
+                <img class="navbar-brand-icon" src="{{ asset('dashboard/images/logos/logo_2.jpg') }}" width="25" alt="Stack">
                 <span>Stack</span>
             </a>
         </div>
