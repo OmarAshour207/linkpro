@@ -37,14 +37,24 @@ class PathController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'     => 'required|string|max:255',
+            'title'     => 'required|array',
             'user_id'   => 'required|numeric',
-            'floor_id'  => 'required|numeric'
+            'floor_id'  => 'required|array',
+            'floor_id.*'=> 'required|string',
+            'path_id'   => 'sometimes|nullable'
         ]);
 
-        Path::create($data);
+        $titles = $data['title'];
+        foreach ($titles as $index => $title) {
+            Path::updateOrCreate(['id' => $data['path_id'][$index]], [
+                'title'         => $title,
+                'user_id'       => $data['user_id'],
+                'floor_id'      => $data['floor_id'][$index]
+            ]);
+        }
         session()->flash('success', __('Saved successfully'));
-        return redirect()->route('paths.index');
+        return redirect("/dashboard/companies/{$data['user_id']}/edit?tab=paths");
+//        return redirect()->route('paths.index');
     }
 
     public function show($id)
@@ -76,6 +86,7 @@ class PathController extends Controller
     {
         $path->delete();
         session()->flash('success', __('Deleted successfully'));
-        return redirect()->route('paths.index');
+        return response()->json(['success' => true], 200);
+//        return redirect()->route('paths.index');
     }
 }

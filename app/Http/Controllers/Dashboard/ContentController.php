@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Floor;
 use App\Models\Office;
-use App\Models\OfficeContent;
+use App\Models\Content;
 use App\Models\Path;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class OfficeContentController extends Controller
+class ContentController extends Controller
 {
     public function index()
     {
-        $contents = OfficeContent::whenSearch(\request()->search)
+        $contents = Content::whenSearch(\request()->search)
             ->whenOffice(\request()->office)
             ->with('company', 'floor', 'path', 'office')
             ->orderBy('id', 'desc')
@@ -39,30 +39,31 @@ class OfficeContentController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'content'   => 'required',
+        $data = $request->validate([
+            'content'   => 'required|array',
             'user_id'   => 'required|numeric',
-            'floor_id'  => 'required|numeric',
-            'path_id'   => 'required|numeric',
-            'office_id' => 'required|numeric',
-            'note'      => 'sometimes|nullable'
+            'floor_id'  => 'required|array',
+            'path_id'   => 'required|array',
+            'office_id' => 'required|array',
+            'content_id'    => 'sometimes|nullable|array'
         ]);
-        $contents = $validated['content'];
-
-        for ($i = 0;$i < count($contents);$i++) {
-            if(!empty($validated['content'][$i])) {
-                OfficeContent::create([
-                    'user_id'   => $validated['user_id'],
-                    'floor_id'  => $validated['floor_id'],
-                    'path_id'   => $validated['path_id'],
-                    'office_id' => $validated['office_id'],
-                    'content'   => $validated['content'][$i],
-                    'note'      => $validated['note'][$i]
-                ]);
-            }
+        $contents = $data['content'];
+        foreach ($contents as $index => $content) {
+            if(empty($content) || $data['floor_id'][$index] == 0 || $data['path_id'][$index] == 0)
+                continue;
+            Content::updateOrCreate([
+                'id'    => $data['content_id'][$index]
+            ],[
+                'user_id'   => $data['user_id'],
+                'floor_id'  => $data['floor_id'][$index],
+                'path_id'   => $data['path_id'][$index],
+                'office_id' => $data['office_id'][$index],
+                'content'   => $data['content'][$index],
+            ]);
         }
+
         session()->flash('success', __('Saved successfully'));
-        return redirect()->route('contents.index');
+        return redirect("/dashboard/companies/{$data['user_id']}/edit?tab=office_contents");
     }
 
     public function show($id)
@@ -70,7 +71,7 @@ class OfficeContentController extends Controller
         //
     }
 
-    public function edit(OfficeContent $content)
+    public function edit(Content $content)
     {
         $companies = User::companies()->get();
         $floors = Floor::where('id', $content->floor_id)->get();
@@ -80,7 +81,7 @@ class OfficeContentController extends Controller
         return view('dashboard.officecontents.edit', compact('content', 'companies', 'floors', 'paths', 'offices'));
     }
 
-    public function update(Request $request, OfficeContent $content)
+    public function update(Request $request, Content $content)
     {
         $data = $request->validate([
             'content'   => 'required|string|max:255',
@@ -96,10 +97,11 @@ class OfficeContentController extends Controller
         return redirect()->route('contents.index');
     }
 
-    public function destroy(OfficeContent $content)
+    public function destroy(Content $content)
     {
         $content->delete();
         session()->flash('success', __('Deleted successfully'));
-        return redirect()->route('contents.index');
+        return response()->json(['success' => true], 200);
+//        return redirect()->route('contents.index');
     }
 }

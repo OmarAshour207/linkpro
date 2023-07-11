@@ -21,25 +21,22 @@ Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {
     Route::resource('offices', App\Http\Controllers\Dashboard\OfficeController::class);
     Route::post('offices/paths', [App\Http\Controllers\Dashboard\OfficeController::class, 'showPaths'])->name('offices.paths');
 
-    Route::resource('office/contents', App\Http\Controllers\Dashboard\OfficeContentController::class);
-    Route::post('contents/offices', [App\Http\Controllers\Dashboard\OfficeContentController::class, 'showOffices'])->name('contents.offices');
+    Route::resource('contents', App\Http\Controllers\Dashboard\ContentController::class);
+    Route::post('contents/offices', [App\Http\Controllers\Dashboard\ContentController::class, 'showOffices'])->name('contents.offices');
 
     Route::resource('supplies', App\Http\Controllers\Dashboard\SupplyController::class);
 
-    // save tickets from users
-    Route::get('tickets/{mode}', [App\Http\Controllers\Dashboard\TicketController::class, 'index'])->name('tickets');
+    Route::resource('orders/tickets', \App\Http\Controllers\Dashboard\Order\TicketController::class);
 
-    Route::post('tickets/supplies', [App\Http\Controllers\Dashboard\TicketController::class, 'supplies'])->name('tickets.supplies');
+    Route::resource('orders/requests', \App\Http\Controllers\Dashboard\Order\RequestController::class);
 
-    Route::get('tickets/create/{mode}', [App\Http\Controllers\Dashboard\TicketController::class, 'create'])->name('tickets.create');
-    Route::post('tickets/store/{mode}', [App\Http\Controllers\Dashboard\TicketController::class, 'store'])->name('tickets.store');
+    Route::resource('orders/supplies', \App\Http\Controllers\Dashboard\Order\SupplyController::class, ['as' => 'orders']);
 
-    Route::get('tickets/edit/{mode}/{ticket}', [App\Http\Controllers\Dashboard\TicketController::class, 'edit'])->name('tickets.edit');
-    Route::put('tickets/update/{mode}/{ticket}', [App\Http\Controllers\Dashboard\TicketController::class, 'update'])->name('tickets.update');
+    Route::post('orders/supply/data', [\App\Http\Controllers\Dashboard\Order\SupplyController::class, 'supplies'])->name('orders.supply.data');
 
-    Route::delete('tickets/destroy/{id}', [App\Http\Controllers\Dashboard\TicketController::class, 'destroy'])->name('tickets.destroy');
+    Route::get('notifications/clear', [\App\Http\Controllers\Dashboard\NotificationController::class, 'clear'])->name('notifications.clear');
 
-    Route::post('office/contents', [App\Http\Controllers\Dashboard\TicketController::class, 'showContents'])->name('office.contents');
+    Route::post('office/contents', [\App\Http\Controllers\Dashboard\Order\TicketController::class, 'showContents'])->name('office.contents');
 
     Route::get('profile/edit', [App\Http\Controllers\Dashboard\ProfileController::class, 'edit'])->name('edit.profile');
     Route::post('profile/edit', [App\Http\Controllers\Dashboard\ProfileController::class, 'update'])->name('update.profile');

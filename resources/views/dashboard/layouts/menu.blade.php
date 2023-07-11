@@ -13,7 +13,7 @@
                         <li class="sidebar-menu-item">
                             <a class="sidebar-menu-button" href="{{ route('dashboard.index') }}">
                                 <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-chart-bar"></i>
-                                <span class="sidebar-menu-text"> {{ __('admin.stat') }} </span>
+                                <span class="sidebar-menu-text"> {{ __('Stat') }} </span>
                             </a>
                         </li>
                     </ul>
@@ -41,35 +41,6 @@
                     </a>
                 </li>
 
-
-                <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="{{ route('floors.index') }}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-chevron-up"></i>
-                        <span class="sidebar-menu-text"> {{ __('Floors') }} </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="{{ route('paths.index') }}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-compass"></i>
-                        <span class="sidebar-menu-text"> {{ __('Paths') }} </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="{{ route('offices.index') }}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-table"></i>
-                        <span class="sidebar-menu-text"> {{ __('Offices') }} </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="{{ route('contents.index') }}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-table"></i>
-                        <span class="sidebar-menu-text"> {{ __('Offices Contents') }} </span>
-                    </a>
-                </li>
-
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="{{ route('supplies.index') }}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-table"></i>
@@ -80,28 +51,32 @@
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboard_tickets">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-globe"></i>
-                        <span class="sidebar-menu-text"> {{ __('Tickets') }} </span>
+                        <span class="sidebar-menu-text"> {{ __('Orders') }} </span>
                         <span class="ml-auto sidebar-menu-toggle-icon"></span>
                     </a>
                     <ul class="sidebar-submenu collapse" id="dashboard_tickets">
+
                         <li class="sidebar-menu-item">
-                            <a class="sidebar-menu-button" href="{{ route('tickets', 'users') }}">
+                            <a class="sidebar-menu-button" href="{{ route('requests.index') }}">
                                 <i class="fa fa-flag"></i>
-                                <span class="sidebar-menu-text"> {{ __('Users') }}</span>
+                                <span class="sidebar-menu-text"> {{ __('Requests') }}</span>
                             </a>
                         </li>
+
                         <li class="sidebar-menu-item">
-                            <a class="sidebar-menu-button" href="{{ route('tickets', 'companies') }}">
+                            <a class="sidebar-menu-button" href="{{ route('tickets.index') }}">
                                 <i class="fa fa-flag"></i>
-                                <span class="sidebar-menu-text"> {{ __('Companies') }}</span>
+                                <span class="sidebar-menu-text"> {{ __('Tickets') }}</span>
                             </a>
                         </li>
+
                         <li class="sidebar-menu-item">
-                            <a class="sidebar-menu-button" href="{{ route('tickets', 'supplies') }}">
+                            <a class="sidebar-menu-button" href="{{ route('orders.supplies.index') }}">
                                 <i class="fa fa-flag"></i>
                                 <span class="sidebar-menu-text"> {{ __('Supplies') }}</span>
                             </a>
                         </li>
+
                     </ul>
                 </li>
 

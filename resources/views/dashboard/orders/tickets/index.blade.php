@@ -8,12 +8,12 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}"><i class="material-icons icon-20pt">home</i> {{ __('Home') }} </a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Companies Tickets') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Tickets') }}</li>
                         </ol>
                     </nav>
-                    <h1 class="m-0"> {{ __('Companies Tickets') }} </h1>
+                    <h1 class="m-0"> {{ __('Tickets') }} </h1>
                 </div>
-                <a href="{{ route('tickets.create', 'companies') }}" class="btn btn-success ml-3">{{ __('Create') }} <i class="material-icons">add</i></a>
+                <a href="{{ route('tickets.create') }}" class="btn btn-success ml-3">{{ __('Create') }} <i class="material-icons">add</i></a>
             </div>
         </div>
 
@@ -34,9 +34,10 @@
                             </th>
 
                             <th style="width: 10%;"> # </th>
-                            <th style="width: 20%;"> {{ __('Company') }} </th>
+                            <th style="width: 15%;"> {{ __('Company') }} </th>
                             <th style="width: 10%;"> {{ __('Mobile Number') }} </th>
-                            <th style="width: 25%;"> {{ __('Office content') }} - {{ __('Note') }} </th>
+                            <th style="width: 20%;"> {{ __('Note') }} </th>
+                            <th style="width: 10%;"> {{ __('Office Content') }} </th>
                             <th style="width: 10%;"> {{ __('Created at') }} </th>
                             <th style="width: 10%;"> {{ __('Status') }} </th>
                             <th style="width: 10%;"> {{ __('Action') }} </th>
@@ -52,14 +53,30 @@
                                 </div>
                             </td>
 
-                            <td style="width: 10%;">
+                            <td style="width: 5%;">
                                 <div class="badge badge-soft-dark"> {{ $index+1 }} </div>
+                            </td>
+
+                            <td style="width: 15%;">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        {{ mb_substr($ticket->company->name, 0, 20) }}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td style="width: 10%;">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        {{ $ticket->company->phonenumber }}
+                                    </div>
+                                </div>
                             </td>
 
                             <td style="width: 20%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{ mb_substr($ticket->user->name, 0, 20) }}
+                                        {{ $ticket->notes }}
                                     </div>
                                 </div>
                             </td>
@@ -67,23 +84,7 @@
                             <td style="width: 10%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{ $ticket->user->phonenumber }}
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td style="width: 25%;">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <ul>
-                                            @forelse($ticket->ticketData as $data)
-                                                <li>
-                                                    {{ $data->officeContent->content }} - {{ $data->notes }}
-                                                </li>
-                                            @empty
-                                            @endforelse
-                                        </ul>
-
+                                        {{ $ticket->content->content }}
                                     </div>
                                 </div>
                             </td>
@@ -115,7 +116,7 @@
                             </td>
 
                             <td style="width: 10%;">
-                                <a href="{{ route('tickets.edit', ['ticket' => $ticket->id, 'mode' => 'companies']) }}" class="btn btn-sm btn-link">
+                                <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-link">
                                     <i class="fa fa-edit fa-2x"></i>
                                 </a>
                                 <form action="{{ route('tickets.destroy', $ticket->id) }}" method="post" style="display: inline-block">
@@ -130,8 +131,6 @@
                             <h1> {{ __('No records') }} </h1>
                         @endforelse
                         {{ $tickets->appends(request()->query())->links() }}
-
-
                         </tbody>
                     </table>
                 </div>

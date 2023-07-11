@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Floor;
 use App\Models\Media;
+use App\Models\Office;
+use App\Models\Content;
+use App\Models\Path;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -26,6 +30,7 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'name'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users',
@@ -48,9 +53,10 @@ class CompanyController extends Controller
             $data['image'] = $image->name;
         }
 
-        User::create($data);
+        $company = User::create($data);
         session()->flash('success', __('Saved successfully'));
-        return redirect()->route('companies.index');
+        return redirect("/dashboard/companies/{$company->id}/edit?tab=company");
+//        return redirect()->route('companies.edit', $company->id, ['tab' => 'company']);
     }
 
     public function show($id)
@@ -58,10 +64,25 @@ class CompanyController extends Controller
         //
     }
 
-    public function edit(User $company)
+    public function edit($id)
     {
+        $company = User::whereId($id)->whereRole('company')->first();
+        if(!$company)
+            abort(404);
         $supervisors = User::supervisors()->orderBy('id')->get();
-        return view('dashboard.companies.edit', compact('company', 'supervisors'));
+        $floors = Floor::where('user_id', $company->id)->get();
+        $paths = Path::where('user_id', $company->id)->get();
+        $offices = Office::with('path')->where('user_id', $company->id)->get();
+        $officeContents = Content::where('user_id', $company->id)->get();
+
+        return view('dashboard.companies.edit', [
+            'company' => $company,
+            'supervisors'   => $supervisors,
+            'floors'    => $floors,
+            'paths'     => $paths,
+            'offices'   => $offices,
+            'contents'  => $officeContents
+        ]);
     }
 
     public function update(Request $request, User $company)
@@ -94,7 +115,9 @@ class CompanyController extends Controller
 
         $company->update($data);
         session()->flash('success', __('Saved successfully'));
-        return redirect()->route('companies.index');
+
+        return redirect("/dashboard/companies/{$company->id}/edit?tab=company");
+//        return redirect()->route('companies.edit', ['company_id' => $company->id, 'tab' => 'company']);
     }
 
     public function destroy(User $company)

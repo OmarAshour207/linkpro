@@ -11,7 +11,7 @@
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Create') }}</li>
                         </ol>
                     </nav>
-                    <h1 class="m-0"> {{ __('Companies Tickets') }} </h1>
+                    <h1 class="m-0"> {{ __('Tickets') }} </h1>
                 </div>
             </div>
         </div>
@@ -19,17 +19,17 @@
         <div class="container-fluid page__container">
 
             <div class="card card-form__body card-body">
-                <form method="post" action="{{ route('tickets.store', 'companies') }}">
+                <form method="post" action="{{ route('tickets.store') }}">
 
                     @csrf
                     @include('dashboard.partials._errors')
 
                     <div class="form-group col-lg-6">
                         <label for="user"> {{ __('Companies') }}</label>
-                        <select id="user" name="user_id" data-toggle="select" class="form-control company_id select2">
+                        <select id="user" name="company_id" data-toggle="select" class="form-control company_id select2">
                             <option value="" selected> {{ __('Companies') }} </option>
-                            @forelse($users as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}> {{ $user->name . ' -- ' . $user->email }} </option>
+                            @forelse($companies as $company)
+                                <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}> {{ $company->name . ' -- ' . $company->email }} </option>
                             @empty
                                 <option value="" selected> {{ __('No Records') }} </option>
                             @endforelse

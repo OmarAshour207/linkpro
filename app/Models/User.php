@@ -41,7 +41,7 @@ class User extends Authenticatable
         return Storage::url('users/' . $this->image);
     }
 
-    public function getThumbUserImageAttribute()
+    public function getThumbImageAttribute()
     {
         return Storage::url('users/thumb_' . $this->image);
     }

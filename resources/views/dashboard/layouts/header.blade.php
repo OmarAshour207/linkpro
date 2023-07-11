@@ -38,14 +38,21 @@
                         <div id="notifications_menu" class="dropdown-menu dropdown-menu-right navbar-notifications-menu">
                             <div class="dropdown-item d-flex align-items-center py-2">
                                 <span class="flex navbar-notifications-menu__title m-0"> {{ __('Notifications') }} </span>
-                                <a href="#" class="text-muted"><small>{{ __('Clear all') }}</small></a>
+                                <a href="{{ route('notifications.clear') }}" class="text-muted"><small>{{ __('Clear all') }}</small></a>
                             </div>
                             <div class="navbar-notifications-menu__content" data-perfect-scrollbar>
                                 <div class="py-2">
-
+                                    @forelse($notifications as $notification)
+                                        <div class="dropdown-item d-flex">
+                                            <div class="flex">
+                                                {{ $notification->content }}<br>
+                                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </div>
+                                        @empty
+                                    @endforelse
                                 </div>
                             </div>
-                            <a href="#" class="dropdown-item text-center navbar-notifications-menu__footer">{{ __('View all') }}</a>
                         </div>
                     </li>
                 </ul>
@@ -56,7 +63,7 @@
                                     <span class="mr-1 d-flex-inline">
                                         <span class="text-light"> {{ auth()->user()->name }} </span>
                                     </span>
-                            <img src="{{ auth()->user()->userImage }}" class="rounded-circle" width="32" alt="Frontted">
+                            <img src="{{ auth()->user()->thumbImage }}" class="rounded-circle" width="32" alt="Frontted">
                         </a>
                         <div id="account_menu" class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-item-text dropdown-item-text--lh">

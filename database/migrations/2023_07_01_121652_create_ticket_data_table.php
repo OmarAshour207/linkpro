@@ -22,13 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('supply_id')->nullable();
             $table->foreign('supply_id')->references('id')->on('supplies')->onDelete('cascade');
 
-            $table->unsignedBigInteger('officecontent_id')->nullable();
-            $table->foreign('officecontent_id')->references('id')->on('office_contents')->onDelete('cascade');
-
             $table->integer('quantity')->nullable();
             $table->string('unit')->nullable();
 
-            $table->text('notes')->nullable();
+            $table->text('note')->nullable();
 
         });
     }

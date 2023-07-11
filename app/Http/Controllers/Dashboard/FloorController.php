@@ -27,13 +27,22 @@ class FloorController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'     => 'required|string|max:255',
-            'user_id'   => 'required|numeric'
+            'title'     => 'required|array',
+            'user_id'   => 'required|numeric',
+            'floor_id'  => 'sometimes|nullable'
         ]);
 
-        Floor::create($data);
+        foreach ($data['title'] as $index => $title) {
+            if(empty($title))
+                continue;
+            Floor::updateOrCreate(['id' => $data['floor_id'][$index]], [
+                'user_id'       => $data['user_id'],
+                'title'         => $title
+            ]);
+        }
         session()->flash('success', __('Saved successfully'));
-        return redirect()->route('floors.index');
+        return redirect("/dashboard/companies/{$data['user_id']}/edit?tab=floors");
+//        return redirect()->back();
     }
 
     public function show($id)
@@ -50,7 +59,7 @@ class FloorController extends Controller
     public function update(Request $request, Floor $floor)
     {
         $data = $request->validate([
-            'title'     => 'required|string|max:255',
+            'title'     => 'required',
             'user_id'   => 'required|numeric'
         ]);
 
@@ -63,6 +72,7 @@ class FloorController extends Controller
     {
         $floor->delete();
         session()->flash('success', __('Deleted successfully'));
-        return redirect()->route('floors.index');
+        return response()->json(['success' => true], 200);
+//        return redirect()->route('floors.index');
     }
 }

@@ -8,12 +8,12 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}"><i class="material-icons icon-20pt">home</i> {{ __('Home') }} </a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Users Tickets') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Supplies') }}</li>
                         </ol>
                     </nav>
-                    <h1 class="m-0"> {{ __('Users Tickets') }} </h1>
+                    <h1 class="m-0"> {{ __('Supplies') }} </h1>
                 </div>
-                <a href="{{ route('tickets.create', 'users') }}" class="btn btn-success ml-3">{{ __('Create') }} <i class="material-icons">add</i></a>
+                <a href="{{ route('orders.supplies.create') }}" class="btn btn-success ml-3">{{ __('Create') }} <i class="material-icons">add</i></a>
             </div>
         </div>
 
@@ -25,20 +25,11 @@
                     <table class="table mb-0 thead-border-top-0 table-striped">
                         <thead>
                             <tr>
-
-                            <th style="width: 5%;">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input js-toggle-check-all" data-target="#companies" id="customCheckAll">
-                                    <label class="custom-control-label" for="customCheckAll"><span class="text-hide">Toggle all</span></label>
-                                </div>
-                            </th>
-
-                            <th style="width: 5%;"> # </th>
-                            <th style="width: 10%;"> {{ __('Name') }} </th>
-                            <th style="width: 20%;"> {{ __('Content') }} </th>
-                            <th style="width: 15%;"> {{ __('Date From') }} </th>
-                            <th style="width: 15%;"> {{ __('Date To') }} </th>
-                            <th style="width: 10%;"> {{ __('Time') }} </th>
+                            <th style="width: 10%;"> # </th>
+                            <th style="width: 20%;"> {{ __('Company') }} </th>
+                            <th style="width: 10%;"> {{ __('Mobile Number') }} </th>
+                            <th style="width: 30%;"> {{ __('Quantity') }} - {{ __('Unit') }} - {{ __('Supply') }} </th>
+                            <th style="width: 10%;"> {{ __('Created at') }} </th>
                             <th style="width: 10%;"> {{ __('Status') }} </th>
                             <th style="width: 10%;"> {{ __('Action') }} </th>
                             </tr>
@@ -46,45 +37,14 @@
                         <tbody class="list" id="companies">
                         @forelse ($tickets as $index => $ticket)
                         <tr>
-                            <td class="text-left">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input js-check-selected-row" id="customCheck1_20">
-                                    <label class="custom-control-label" for="customCheck1_20"><span class="text-hide">Check</span></label>
-                                </div>
-                            </td>
-
-                            <td style="width: 5%;">
-                                <div class="badge badge-soft-dark"> {{ $index+1 }} </div>
-                            </td>
-
                             <td style="width: 10%;">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        {{ mb_substr($ticket->user->name, 0, 20) }}
-                                    </div>
-                                </div>
+                                <div class="badge badge-soft-dark"> {{ $index+1 }} </div>
                             </td>
 
                             <td style="width: 20%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{ mb_substr($ticket->content, 0, 40) }}
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td style="width: 15%;">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        {{ $ticket->date_from }}
-                                    </div>
-                                </div>
-                             </td>
-
-                            <td style="width: 15%;">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        {{ $ticket->date_to }}
+                                        {{ mb_substr($ticket->company->name, 0, 20) }}
                                     </div>
                                 </div>
                             </td>
@@ -92,7 +52,31 @@
                             <td style="width: 10%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{ \Carbon\Carbon::createFromFormat('H:i:s', $ticket->time_from)->format('h:i') }}
+                                        {{ $ticket->company->phonenumber }}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td style="width: 30%;">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <ul>
+                                            @forelse($ticket->ticketData as $data)
+                                                <li>
+                                                    {{ $data->quantity }} - {{ $data->unit }} - {{ $data->supply->name }}
+                                                </li>
+                                            @empty
+                                            @endforelse
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td style="width: 10%;">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        {{ $ticket->created_at->diffForHumans() }}
                                     </div>
                                 </div>
                             </td>
@@ -115,11 +99,11 @@
                                 </div>
                             </td>
 
-                            <td>
-                                <a href="{{ route('tickets.edit', ['ticket' => $ticket->id, 'mode' => 'users']) }}" class="btn btn-sm btn-link">
+                            <td style="width: 10%;">
+                                <a href="{{ route('orders.supplies.edit', $ticket->id) }}" class="btn btn-sm btn-link">
                                     <i class="fa fa-edit fa-2x"></i>
                                 </a>
-                                <form action="{{ route('tickets.destroy', $ticket->id) }}" method="post" style="display: inline-block">
+                                <form action="{{ route('orders.supplies.destroy', $ticket->id) }}" method="post" style="display: inline-block">
                                     @csrf
                                     @method('delete')
 
@@ -131,7 +115,6 @@
                             <h1> {{ __('No records') }} </h1>
                         @endforelse
                         {{ $tickets->appends(request()->query())->links() }}
-
 
                         </tbody>
                     </table>

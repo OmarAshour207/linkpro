@@ -87,7 +87,7 @@
                                 </div>
                             </td>
                             <td>
-                                <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-sm btn-link">
+                                <a href='{{ url("/dashboard/companies/{$company->id}/edit?tab=company") }}' class="btn btn-sm btn-link">
                                     <i class="fa fa-edit fa-2x"></i>
                                 </a>
                                 <form action="{{ route('companies.destroy', $company->id) }}" method="post" style="display: inline-block">

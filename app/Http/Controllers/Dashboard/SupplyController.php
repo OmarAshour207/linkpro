@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Supply;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,13 +37,19 @@ class SupplyController extends Controller
 
         for ($i = 0;$i < count($names);$i++) {
             if(!empty($data['name'][$i])) {
-                Supply::create([
+                $supply = Supply::create([
                     'name'      => $data['name'][$i],
                     'quantity'  => $data['quantity'][$i],
                     'user_id'   => $data['user_id']
                 ]);
             }
         }
+
+        Notification::create([
+            'content'   => __("New supply added for company ") . $supply->company->name,
+            'user_id'   => auth()->user()->id
+        ]);
+
         session()->flash('success', __('Saved Successfully'));
         return redirect()->route('supplies.index');
     }

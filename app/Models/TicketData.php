@@ -16,8 +16,7 @@ class TicketData extends Model
         'supply_id',
         'quantity',
         'unit',
-        'officecontent_id',
-        'notes'
+        'note'
     ];
 
     public function supply()
@@ -25,8 +24,4 @@ class TicketData extends Model
         return $this->belongsTo(Supply::class, 'supply_id');
     }
 
-    public function officeContent()
-    {
-        return $this->belongsTo(OfficeContent::class, 'officecontent_id');
-    }
 }
