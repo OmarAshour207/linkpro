@@ -73,4 +73,14 @@ class User extends Authenticatable
 
         });
     }
+
+    public function floors()
+    {
+        return $this->hasMany(Floor::class, 'user_id');
+    }
+
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class, 'supervisor_id')->withDefault();
+    }
 }

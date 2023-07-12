@@ -34,4 +34,9 @@ class Path extends Model
     {
         return $this->belongsTo(Floor::class, 'floor_id');
     }
+
+    public function offices()
+    {
+        return $this->hasMany(Office::class, 'path_id');
+    }
 }

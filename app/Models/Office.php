@@ -40,4 +40,9 @@ class Office extends Model
     {
         return $this->belongsTo(Path::class, 'path_id');
     }
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class, 'office_id');
+    }
 }

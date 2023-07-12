@@ -27,4 +27,9 @@ class Floor extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function paths()
+    {
+        return $this->hasMany(Path::class, 'floor_id');
+    }
 }
