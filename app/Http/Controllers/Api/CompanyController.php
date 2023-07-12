@@ -18,7 +18,7 @@ class CompanyController extends Controller
 
         if(count($company) > 0)
             if (auth()->user()->id != $company->first()->id)
-                return response()->json(['error'  => 's_unauthorized', 'success' => false]);
+                return response()->json(['errors'  => ['s_authError'], 'success' => false]);
 
         return response()->json(['company'  => CompanyResource::collection($company), 'success' => true]);
     }

@@ -9,6 +9,11 @@ class LocaleCheck
 {
     public function handle(Request $request, Closure $next)
     {
+        $locale = $request->get('locale');
+        if($locale == 'ar') {
+            session()->put('locale', 'ar');
+        }
+
         if(session()->has('locale')) {
             app()->setLocale(session()->get('locale'));
         } else {

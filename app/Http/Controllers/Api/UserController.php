@@ -24,8 +24,14 @@ class UserController extends Controller
             'lng'           => 'sometimes|nullable'
         ]);
 
-        if($validator->fails())
-            return response()->json(['success' => false, 'errors' => $validator->errors()]);
+        if($validator->fails()) {
+            $messages = [];
+            $errors = array_values($validator->errors()->getMessages());
+            for ($i = 0; $i < count($errors);$i++) {
+                $messages[] = $errors[$i][0];
+            }
+            return response()->json(['success' => false, 'errors' => $messages]);
+        }
 
         $data = $validator->validated();
         $data['password'] = Hash::make($data['password']);
@@ -47,7 +53,7 @@ class UserController extends Controller
         elseif ($request->get('email'))
             $credentials['email'] = $request->get('email');
         else
-            return response()->json(['success' => false, 'errors' => "s_authError"]);
+            return response()->json(['success' => false, 'errors' => ["s_authError"]]);
 
         if(Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -55,6 +61,6 @@ class UserController extends Controller
 
             return response()->json(['success' => true, 'token' => $token]);
         }
-        return response()->json(['success' => false, 'error' => 's_authError']);
+        return response()->json(['success' => false, 'errors' => ['s_authError']]);
     }
 }
