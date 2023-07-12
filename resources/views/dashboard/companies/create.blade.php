@@ -167,7 +167,7 @@
 
                                         <div class="form-group col">
                                             <label for="supervisor_id"> {{ __('Responsible Supervisor') }}</label> <br>
-                                            <select id="supervisor_id" name="supervisor_id" data-toggle="select" class="form-control select2" required>
+                                            <select id="supervisor_id" name="supervisor_id" data-toggle="select" class="form-control select2">
                                                 <option value="" selected> {{ __('Responsible Supervisor') }} </option>
                                                 @forelse($supervisors as $supervisor)
                                                     <option value="{{ $supervisor->id }}" {{ old('supervisor_id') == $supervisor->id ? 'selected' : '' }}>
