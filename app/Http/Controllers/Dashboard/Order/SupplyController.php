@@ -42,7 +42,7 @@ class SupplyController extends Controller
         ]);
 
         $data['user_id'] = auth()->user()->id;
-        $data['type'] = 'supplies';
+        $data['type'] = 'supply';
 
         $ticket = Ticket::create($data);
 

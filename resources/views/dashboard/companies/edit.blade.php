@@ -45,7 +45,7 @@
                     @else
                         var mock = { name: '{{ $company->name }}', size: 2};
                         this.emit('addedfile', mock);
-                        this.emit('thumbnail', mock, '{{ $company->thumbImage }}');
+                        this.emit('thumbnail', mock, '{{ $company->image }}');
                         this.emit('complete', mock);
                         $('.dz-progress').remove();
                     @endif

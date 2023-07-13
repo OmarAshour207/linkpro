@@ -45,7 +45,7 @@
                     @else
                         var mock = { name: '{{ $user->name }}', size: 2};
                         this.emit('addedfile', mock);
-                        this.emit('thumbnail', mock, '{{ $user->thumbUserImage }}');
+                        this.emit('thumbnail', mock, '{{ $user->thumbImage }}');
                         this.emit('complete', mock);
                         $('.dz-progress').remove();
                     @endif
@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="form-group">
-                        <input class="image_name" type="hidden" name="image" value="">
+                        <input class="image_name" type="hidden" name="image" value="{{ $user->image }}">
                     </div>
 
                     <div class="form-group">

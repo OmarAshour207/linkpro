@@ -7,12 +7,13 @@ use App\Http\Resources\ServiceResource;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
-class ServiceController extends Controller
+class ServiceController extends BaseController
 {
     public function index()
     {
         $services = Service::all();
 
-        return response()->json(['services' => ServiceResource::collection($services), 'success' => true]);
+        return $this->sendResponse(ServiceResource::collection($services), __('Services'));
+//        return response()->json(['services' => ServiceResource::collection($services), 'success' => true]);
     }
 }

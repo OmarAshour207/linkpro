@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function register(Request $request)
     {
@@ -25,21 +25,16 @@ class UserController extends Controller
         ]);
 
         if($validator->fails()) {
-            $messages = [];
-            $errors = array_values($validator->errors()->getMessages());
-            for ($i = 0; $i < count($errors);$i++) {
-                $messages[] = $errors[$i][0];
-            }
-            return response()->json(['success' => false, 'errors' => $messages]);
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages());
         }
 
         $data = $validator->validated();
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
-        $token = $user->createToken('LinkPro')->plainTextToken;
+        $success['token'] = $user->createToken('LinkPro')->plainTextToken;
 
-        return response()->json(['success' => true, 'token' => $token]);
+        return $this->sendResponse($success, __('User Registered Successfully.'));
     }
 
     public function login(Request $request)
@@ -53,14 +48,15 @@ class UserController extends Controller
         elseif ($request->get('email'))
             $credentials['email'] = $request->get('email');
         else
-            return response()->json(['success' => false, 'errors' => ["s_authError"]]);
+            return $this->sendError(__('Auth Error!'), ['s_authError']);
 
         if(Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = $user->createToken('LinkPro')->plainTextToken;
+            $success['token'] = $user->createToken('LinkPro')->plainTextToken;
 
-            return response()->json(['success' => true, 'token' => $token]);
+            return $this->sendResponse($success, __('User Logged Successfully.'));
         }
-        return response()->json(['success' => false, 'errors' => ['s_authError']]);
+
+        return $this->sendError(__('Auth Error!'), ['s_authError']);
     }
 }

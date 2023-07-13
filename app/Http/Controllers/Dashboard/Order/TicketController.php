@@ -44,7 +44,7 @@ class TicketController extends Controller
         ]);
         $data['notes'] = $data['notes'][$data['content_id']];
 
-        $data['type'] = 'company';
+        $data['type'] = 'ticket';
         $data['user_id'] = auth()->user()->id;
         Ticket::create($data);
 

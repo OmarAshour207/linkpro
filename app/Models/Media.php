@@ -17,11 +17,13 @@ class Media extends Model
 
     public function getMediaImageAttribute()
     {
-        return Storage::url($this->type . '/thumb_' . $this->name);
+        return url('/uploads/temp/users/' . $this->type . '/' . $this->name);
+//        return Storage::url($this->type . '/thumb_' . $this->name);
     }
 
     public function getTempMediaImageAttribute()
     {
-        return Storage::url('temp/' .$this->type . '/thumb_' . $this->name);
+        return url('/uploads/temp/users/' . $this->type . '/thumb_' . $this->name);
+//        return Storage::url('temp/' .$this->type . '/thumb_' . $this->name);
     }
 }

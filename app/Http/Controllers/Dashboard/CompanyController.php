@@ -48,8 +48,10 @@ class CompanyController extends Controller
 
         if ($request->image) {
             $image = Media::where('id', $request->image)->first();
-            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
-            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
+            File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
+            File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
+//            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
+//            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
             $data['image'] = $image->name;
         }
 
@@ -67,6 +69,7 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = User::whereId($id)->whereRole('company')->first();
+        dd($company);
         if(!$company)
             abort(404);
         $supervisors = User::supervisors()->orderBy('id')->get();
@@ -106,8 +109,10 @@ class CompanyController extends Controller
 
         if ($request->image) {
             $image = Media::where('id', $request->image)->first();
-            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
-            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
+            File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
+            File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
+//            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
+//            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
             $data['image'] = $image->name;
         } else {
             unset($data['image']);

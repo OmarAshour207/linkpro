@@ -45,7 +45,7 @@ class RequestController extends Controller
             'end_time'      => 'required|date_format:H:i',
             'user_id'       => 'required|numeric'
         ]);
-        $data['type'] = 'users';
+        $data['type'] = 'request';
 
         Ticket::create($data);
         session()->flash('success', __('Saved successfully'));

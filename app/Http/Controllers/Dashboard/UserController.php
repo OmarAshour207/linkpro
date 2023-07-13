@@ -31,8 +31,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'      => 'sometime|nullable|string|max:255',
-            'email'     => 'sometime|nullable|email|unique:users',
+            'name'      => 'sometimes|nullable|string|max:255',
+            'email'     => 'sometimes|nullable|email|unique:users',
             'password'  => 'required|string|min:6|confirmed',
             'phonenumber'   => 'required|numeric|unique:users',
             'image'     => 'sometimes|nullable',
@@ -43,8 +43,10 @@ class UserController extends Controller
 
         if ($request->image) {
             $image = Media::where('id', $request->image)->first();
-            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
-            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
+            File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
+//            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
+//            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
+            File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
             $data['image'] = $image->name;
         }
 
@@ -81,8 +83,11 @@ class UserController extends Controller
 
         if ($request->image) {
             $image = Media::where('id', $request->image)->first();
-            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
-            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
+            File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
+            File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
+
+//            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
+//            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
             $data['image'] = $image->name;
         } else {
             unset($data['image']);

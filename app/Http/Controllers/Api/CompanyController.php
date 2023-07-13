@@ -7,7 +7,7 @@ use App\Http\Resources\CompanyResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller
+class CompanyController extends BaseController
 {
     public function get($id)
     {
@@ -18,8 +18,13 @@ class CompanyController extends Controller
 
         if(count($company) > 0)
             if (auth()->user()->id != $company->first()->id)
-                return response()->json(['errors'  => ['s_authError'], 'success' => false]);
+                return $this->sendError(['Auth Error!', ['s_authError']]);
 
-        return response()->json(['company'  => CompanyResource::collection($company), 'success' => true]);
+        return $this->sendResponse(CompanyResource::collection($company), __('Company'));
+    }
+
+    public function edit($id, Request $request)
+    {
+
     }
 }
