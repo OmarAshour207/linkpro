@@ -6,14 +6,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContentResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'         => $this->id,
+            'note'       => $this->note,
+            'office'     => new OfficeResource($this->office),
+            'path'       => new PathResource($this->path),
+            'floor'      => new FloorResource($this->floor),
+            'created_at' => $this->created_at
+        ];
     }
 }

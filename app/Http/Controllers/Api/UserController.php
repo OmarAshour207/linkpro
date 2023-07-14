@@ -25,7 +25,7 @@ class UserController extends BaseController
         ]);
 
         if($validator->fails()) {
-            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages());
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
         }
 
         $data = $validator->validated();
@@ -48,7 +48,7 @@ class UserController extends BaseController
         elseif ($request->get('email'))
             $credentials['email'] = $request->get('email');
         else
-            return $this->sendError(__('Auth Error!'), ['s_authError']);
+            return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
 
         if(Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -57,6 +57,6 @@ class UserController extends BaseController
             return $this->sendResponse($success, __('User Logged Successfully.'));
         }
 
-        return $this->sendError(__('Auth Error!'), ['s_authError']);
+        return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
     }
 }

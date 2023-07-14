@@ -36,6 +36,20 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'company_id');
     }
 
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class, 'floor_id');
+    }
+
+    public function path()
+    {
+        return $this->belongsTo(Path::class, 'path_id');
+    }
+
+    public function office()
+    {
+        return $this->belongsTo(Office::class, 'office_id');
+    }
     public function content()
     {
         return $this->belongsTo(Content::class, 'content_id');
@@ -49,4 +63,5 @@ class Ticket extends Model
     {
         return $this->hasMany(TicketData::class, 'ticket_id');
     }
+
 }

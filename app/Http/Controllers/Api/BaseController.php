@@ -26,7 +26,7 @@ class BaseController extends Controller
         ];
 
         if(!empty($errorMessages)) {
-            $response['data'] = $this->adaptErrorMessages($errorMessages);
+            $response['errors'] = $this->adaptErrorMessages($errorMessages);
         }
 
         return response()->json($response, $code);

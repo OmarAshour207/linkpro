@@ -18,7 +18,7 @@ class CompanyController extends BaseController
 
         if(count($company) > 0)
             if (auth()->user()->id != $company->first()->id)
-                return $this->sendError(['Auth Error!', ['s_authError']]);
+                return $this->sendError(['Auth Error!', ['s_authError']], 401);
 
         return $this->sendResponse(CompanyResource::collection($company), __('Company'));
     }

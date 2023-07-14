@@ -23,6 +23,10 @@ Route::group([
 
         Route::post('requests/store', [\App\Http\Controllers\Api\OrderController::class, 'storeRequest']);
 
+        Route::get('{mode}/order/{id}', [\App\Http\Controllers\Api\OrderController::class, 'get']);
+
+        Route::get('user/{mode}', [\App\Http\Controllers\Api\OrderController::class, 'getUserOrders']);
+
     });
 });
 
