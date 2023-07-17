@@ -15,7 +15,7 @@ Route::group([
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
-        Route::get('companies/{id}', [\App\Http\Controllers\Api\CompanyController::class, 'get']);
+        Route::get('company/get', [\App\Http\Controllers\Api\CompanyController::class, 'get']);
 
         Route::post('tickets/store', [\App\Http\Controllers\Api\OrderController::class, 'storeTicket']);
 
