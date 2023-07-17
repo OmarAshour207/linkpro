@@ -182,7 +182,7 @@
                             @csrf
 
                             <input type="hidden" name="user_id" class="user_id_hidden_input">
-                            
+
                         </form>
                     </div>
                     <div class="tab-pane" id="activity_emails">

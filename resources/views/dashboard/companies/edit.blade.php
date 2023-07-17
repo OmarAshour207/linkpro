@@ -287,12 +287,13 @@
                                         </div>
                                     @empty
                                     @endforelse
+
+                                    <button class="btn btn-info ml-3 new_path">
+                                        {{ __('Create New Path') }} <i class="material-icons">add</i>
+                                    </button>
                                 </div>
                             </div>
 
-                            <button class="btn btn-info ml-3 new_path">
-                                {{ __('Create New Path') }} <i class="material-icons">add</i>
-                            </button>
 
                             <div class="text-right mb-5">
                                 <input type="submit" class="btn btn-success" value="{{ __('Add') }}">
@@ -370,12 +371,11 @@
                                         </div>
                                     @empty
                                     @endforelse
+                                    <button class="btn btn-info ml-3 new_office">
+                                        {{ __('Create New Office') }} <i class="material-icons">add</i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <button class="btn btn-info ml-3 new_office">
-                                {{ __('Create New Office') }} <i class="material-icons">add</i>
-                            </button>
 
                             <div class="text-right mb-5">
                                 <input type="submit" class="btn btn-success" value="{{ __('Add') }}">
@@ -461,12 +461,11 @@
                                         </div>
                                     @empty
                                     @endforelse
+                                    <button class="btn btn-info ml-3 new_content">
+                                        {{ __('Create New Content') }} <i class="material-icons">add</i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <button class="btn btn-info ml-3 new_content">
-                                {{ __('Create New Content') }} <i class="material-icons">add</i>
-                            </button>
 
                             <div class="text-right mb-5">
                                 <input type="submit" class="btn btn-success" value="{{ __('Add') }}">
@@ -530,12 +529,11 @@
                                         </div>
                                     @endforelse
 
+                                    <button class="btn btn-info ml-3 new_supply">
+                                        {{ __('Create new Supply') }} <i class="material-icons">add</i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <button class="btn btn-info ml-3 new_supply">
-                                {{ __('Create new Supply') }} <i class="material-icons">add</i>
-                            </button>
 
 
                             <div class="text-right mb-5">
