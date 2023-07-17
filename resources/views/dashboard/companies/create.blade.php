@@ -133,24 +133,6 @@
                                 </div>
                             </div>
 
-                            <div class="row no-gutters">
-                                <div class="col card-body">
-                                    <p><strong class="headings-color">{{ __('Location') }}</strong></p>
-                                </div>
-                                <div class="col card-form__body card-body">
-                                    <div class="row">
-                                        <div class="form-group col">
-                                            <label for="lat">{{ __('Lat') }}</label>
-                                            <input id="lat" name="lat" type="text" dir="ltr" class="form-control" value="{{ old('lat') }}" placeholder="{{ __('Lat') }}">
-                                        </div>
-                                        <div class="form-group col">
-                                            <label for="lng">{{ __('Lng') }}</label>
-                                            <input id="lng" name="lng" type="text" dir="ltr" class="form-control" value="{{ old('lng') }}" placeholder="{{ __('Lng') }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <label for="address"> {{ __("Address") }}</label>
                                 <input id="address" name="address" dir="auto" type="text" class="form-control" placeholder="{{ __("Address") }}" value="{{ old("address") }}">
@@ -200,15 +182,7 @@
                             @csrf
 
                             <input type="hidden" name="user_id" class="user_id_hidden_input">
-
-                            <div class="form-group">
-                                <label for="title"> {{ __("Title") }}</label>
-                                <input id="title" name="title" dir="auto" type="text" class="form-control" placeholder="{{ __("Title") }}" value="{{ old("title") }}">
-                            </div>
-
-                            <div class="text-right mb-5">
-                                <input type="submit" class="btn btn-success" value="{{ __('Add') }}">
-                            </div>
+                            
                         </form>
                     </div>
                     <div class="tab-pane" id="activity_emails">
