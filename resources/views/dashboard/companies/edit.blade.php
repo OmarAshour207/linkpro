@@ -45,7 +45,7 @@
                     @else
                         var mock = { name: '{{ $company->name }}', size: 2};
                         this.emit('addedfile', mock);
-                        this.emit('thumbnail', mock, '{{ $company->image }}');
+                        this.emit('thumbnail', mock, '{{ $company->thumbImage }}');
                         this.emit('complete', mock);
                         $('.dz-progress').remove();
                     @endif
@@ -94,14 +94,15 @@
                 <a href="#paths_tab" class="{{ request()->tab == 'paths' ? 'active' : '' }}" data-toggle="tab" role="tab" aria-controls="paths_tab" aria-selected="false"><i class="fa fa-compass"></i> {{ __('Paths') }}</a>
                 <a href="#offices_tab" class="{{ request()->tab == 'offices' ? 'active' : '' }}" data-toggle="tab" role="tab" aria-controls="offices_tab" aria-selected="false"><i class="fa fa-table"></i> {{ __('Offices') }}</a>
                 <a href="#offices_contents_tab" class="{{ request()->tab == 'office_contents' ? 'active' : '' }}" data-toggle="tab" role="tab" aria-controls="offices_contents_tab" aria-selected="false"><i class="fa fa-tablet-alt"></i> {{ __('Offices Contents') }}</a>
+                <a href="#supplies_tab" class="{{ request()->tab == 'supplies' ? 'active' : '' }}" data-toggle="tab" role="tab" aria-controls="supplies_tab" aria-selected="false"><i class="fa fa-tablet"></i> {{ __('Supplies') }}</a>
             </div>
             <div class="card card-form__body card-body">
-                @if(session('success'))
-                    <div class="alert alert-success success-msg">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <p class="mb-0"> {{ __('Saved successfully') }} </p>
-                    </div>
-                @endif
+{{--                @if(session('success'))--}}
+{{--                    <div class="alert alert-success success-msg">--}}
+{{--                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>--}}
+{{--                        <p class="mb-0"> {{ __('Saved successfully') }} </p>--}}
+{{--                    </div>--}}
+{{--                @endif--}}
 
                 <div class="list-group tab-content list-group-flush">
                     <div class="tab-pane {{ request()->tab == 'company' ? 'active show fade' : '' }}" id="company_tab">
@@ -143,24 +144,6 @@
                                 </div>
                             </div>
 
-                            <div class="row no-gutters">
-                                <div class="col card-body">
-                                    <p><strong class="headings-color">{{ __('Location') }}</strong></p>
-                                </div>
-                                <div class="col card-form__body card-body">
-                                    <div class="row">
-                                        <div class="form-group col">
-                                            <label for="lat">{{ __('Lat') }}</label>
-                                            <input id="lat" name="lat" type="text" dir="ltr" class="form-control" value="{{ old('lat', $company->lat) }}" placeholder="{{ __('Lat') }}">
-                                        </div>
-                                        <div class="form-group col">
-                                            <label for="lng">{{ __('Lng') }}</label>
-                                            <input id="lng" name="lng" type="text" dir="ltr" class="form-control" value="{{ old('lng', $company->lng) }}" placeholder="{{ __('Lng') }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <label for="address"> {{ __("Address") }}</label>
                                 <input id="address" name="address" dir="auto" type="text" class="form-control" placeholder="{{ __("Address") }}" value="{{ old("address", $company->address) }}">
@@ -192,7 +175,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input class="image_name" type="hidden" name="image" value="">
+                                <input class="image_name" type="hidden" name="image" value="{{ $company->image }}">
                             </div>
 
                             <div class="form-group">
@@ -490,6 +473,76 @@
                             </div>
                         </form>
                     </div>
+                    <div class="tab-pane {{ request()->tab == 'supplies' ? 'active show fade' : '' }}" id="supplies_tab">
+                        <form method="post" action="{{ route('supplies.store') }}">
+
+                            @csrf
+                            @include('dashboard.partials._errors')
+
+                            <div class="card card-form d-flex flex-column flex-sm-row">
+                                <div class="card-form__body card-body-form-group flex">
+
+                                    <input type="hidden" name="user_id" value="{{ $company->id }}">
+
+                                    @forelse($supplies as $supply)
+                                        <input type="hidden" name="supply_id[]" value="{{ $supply->id }}">
+                                        <div class="row">
+                                            <div class="form-group col">
+                                                <label for="name">{{ __('Name') }}</label>
+                                                <input id="name" name="name[]" value="{{ $supply->name }}" type="text" class="form-control" placeholder="{{ __('Name') }}">
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="quantity">{{ __('Quantity') }}</label>
+                                                <input id="quantity" name="quantity[]" type="number" value="{{ $supply->quantity }}" class="form-control" placeholder="{{ __('Quantity') }}">
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="unit">{{ __('Unit') }}</label>
+                                                <input id="unit" name="unit[]" type="text" value="{{ $supply->unit }}" class="form-control" placeholder="{{ __('Unit') }}">
+                                            </div>
+
+                                            <div class="col-sm">
+                                                <div class="form-group">
+                                                    <label>{{ __('Action') }}</label>
+                                                    <button type="button"
+                                                            class="btn btn-danger btn-lg delete-btn form-control"
+                                                            data-action="{{ route('supplies.destroy', $supply->id) }}"
+                                                            style="display: block; width: 40px;">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="row">
+                                            <input type="hidden" name="supply_id[]" value="0">
+                                            <div class="form-group col">
+                                                <label for="name">{{ __('Name') }}</label>
+                                                <input id="name" name="name[]" type="text" class="form-control" placeholder="{{ __('Name') }}">
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="quantity">{{ __('Quantity') }}</label>
+                                                <input id="quantity" name="quantity[]" type="number" class="form-control" placeholder="{{ __('Quantity') }}">
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="unit">{{ __('Unit') }}</label>
+                                                <input id="unit" name="unit[]" type="text" class="form-control" placeholder="{{ __('Unit') }}">
+                                            </div>
+                                        </div>
+                                    @endforelse
+
+                                </div>
+                            </div>
+
+                            <button class="btn btn-info ml-3 new_supply">
+                                {{ __('Create new Supply') }} <i class="material-icons">add</i>
+                            </button>
+
+
+                            <div class="text-right mb-5">
+                                <input type="submit" class="btn btn-success" value="{{ __('Add') }}">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -654,6 +707,32 @@
                                 '<input id="content_office" name="content[]" type="text" class="form-control" placeholder="{{ __('Content') }}">'+
                             '</div>'+
                         '</div>'+
+                    '</div>'
+                );
+            });
+
+            // add new supply
+            $(".new_supply").click( function (e) {
+                e.preventDefault();
+                $('.new_supply').before(
+                    '<div class="row no-gutters">' +
+                        '<div class="col card-form__body card-body">' +
+                            '<div class="row">' +
+                                '<input type="hidden" name="supply_id[]" value="0">'+
+                                '<div class="form-group col">' +
+                                    '<label for="name">{{ __('Name') }}</label>' +
+                                    '<input id="name" name="name[]" type="text" class="form-control" placeholder="{{ __('Name') }}">' +
+                                '</div>' +
+                                '<div class="form-group col">' +
+                                    '<label for="quantity">{{ __('Quantity') }}</label>' +
+                                    '<input id="quantity" name="quantity[]" type="number" class="form-control" placeholder="{{ __('Quantity') }}">' +
+                                '</div>' +
+                                '<div class="form-group col">' +
+                                    '<label for="unit">{{ __('Unit') }}</label>' +
+                                    '<input id="unit" name="unit[]" type="text" class="form-control" placeholder="{{ __('Unit') }}">' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
                     '</div>'
                 );
             });

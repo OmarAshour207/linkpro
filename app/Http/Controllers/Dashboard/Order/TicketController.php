@@ -18,7 +18,7 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::whereType('company')
+        $tickets = Ticket::whereType('ticket')
             ->with('company', 'content')
             ->latest()
             ->paginate(20);

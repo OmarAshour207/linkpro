@@ -28,30 +28,31 @@ class SupplyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'      => 'required',
-            'quantity'  => 'sometimes|nullable',
-            'user_id'   => 'required|numeric'
+            'user_id'   => 'required|numeric',
+            'supply_id' => 'sometimes|nullable|array',
+            'name'      => 'required|array',
+            'quantity'  => 'sometimes|nullable|array',
+            'unit'      => 'sometimes|nullable|array'
         ]);
 
-        $names = $data['name'];
+        $supplies = $data['name'];
 
-        for ($i = 0;$i < count($names);$i++) {
-            if(!empty($data['name'][$i])) {
-                $supply = Supply::create([
-                    'name'      => $data['name'][$i],
-                    'quantity'  => $data['quantity'][$i],
-                    'user_id'   => $data['user_id']
-                ]);
-            }
+        foreach ($supplies as $index => $supply) {
+            if(empty($supply))
+                continue;
+            Supply::updateOrCreate([
+                'id'    => $data['supply_id'][$index]
+            ],[
+                'user_id'   => $data['user_id'],
+                'name'      => $data['name'][$index],
+                'quantity'  => $data['quantity'][$index],
+                'unit'      => $data['unit'][$index],
+            ]);
         }
 
-        Notification::create([
-            'content'   => __("New supply added for company ") . $supply->company->name,
-            'user_id'   => auth()->user()->id
-        ]);
-
-        session()->flash('success', __('Saved Successfully'));
-        return redirect()->route('supplies.index');
+        session()->flash('success', __('Saved successfully'));
+        return redirect("/dashboard/companies/{$data['user_id']}/edit?tab=supplies");
+//        return redirect()->route('supplies.index');
     }
 
     public function show(Supply $supply)
@@ -81,7 +82,8 @@ class SupplyController extends Controller
     public function destroy(Supply $supply)
     {
         $supply->delete();
-        session()->flash('success', __('Deleted Successfully'));
-        return redirect()->route('supplies.index');
+        session()->flash('success', __('Deleted successfully'));
+        return response()->json(['success' => true], 200);
+//        return redirect()->route('supplies.index');
     }
 }

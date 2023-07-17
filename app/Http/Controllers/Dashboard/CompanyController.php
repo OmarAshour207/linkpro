@@ -8,6 +8,7 @@ use App\Models\Media;
 use App\Models\Office;
 use App\Models\Content;
 use App\Models\Path;
+use App\Models\Supply;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -76,6 +77,7 @@ class CompanyController extends Controller
         $paths = Path::where('user_id', $company->id)->get();
         $offices = Office::with('path')->where('user_id', $company->id)->get();
         $officeContents = Content::where('user_id', $company->id)->get();
+        $supplies = Supply::where('user_id', $company->id)->get();
 
         return view('dashboard.companies.edit', [
             'company' => $company,
@@ -83,7 +85,8 @@ class CompanyController extends Controller
             'floors'    => $floors,
             'paths'     => $paths,
             'offices'   => $offices,
-            'contents'  => $officeContents
+            'contents'  => $officeContents,
+            'supplies'  => $supplies
         ]);
     }
 

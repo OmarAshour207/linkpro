@@ -19,7 +19,7 @@ class RequestController extends Controller
 {
     public function index()
     {
-        $requests = Ticket::whereType('users')
+        $requests = Ticket::whereType('request')
             ->with('user', 'service')
             ->latest()
             ->paginate(20);

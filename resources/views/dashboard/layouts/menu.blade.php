@@ -42,13 +42,6 @@
                 </li>
 
                 <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="{{ route('supplies.index') }}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-table"></i>
-                        <span class="sidebar-menu-text"> {{ __('Supplies') }} </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboard_tickets">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-globe"></i>
                         <span class="sidebar-menu-text"> {{ __('Orders') }} </span>

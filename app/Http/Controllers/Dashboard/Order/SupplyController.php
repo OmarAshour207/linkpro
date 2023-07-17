@@ -18,7 +18,7 @@ class SupplyController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::whereType('supplies')
+        $tickets = Ticket::whereType('supply')
             ->with('company', 'ticketData.supply')
             ->latest()
             ->paginate(20);

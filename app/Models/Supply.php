@@ -14,7 +14,8 @@ class Supply extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'quantity'
+        'quantity',
+        'unit'
     ];
 
     // Scopes

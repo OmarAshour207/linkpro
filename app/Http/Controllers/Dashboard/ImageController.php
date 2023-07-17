@@ -22,7 +22,7 @@ class ImageController extends Controller
                 ->encode('jpg')->save(public_path($imagePath . $request->image->hashName()));
 
         $thumbImageName = Image::make($request->image)
-                ->resize(40, 40)
+                ->resize(100, 100)
                 ->encode('jpg')->save(public_path($imagePath . 'thumb_' . $request->image->hashName()));
 
 

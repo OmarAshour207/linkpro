@@ -133,7 +133,7 @@
 @push('admin_scripts')
     <script>
         $("#date" ).flatpickr({
-            minDate: "today",
+            minDate: '{{ $request->date }}',
             locale: "{{ session()->get('locale') }}",
             defaultDate: '{{ $request->date }}'
         });
