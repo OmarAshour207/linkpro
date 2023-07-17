@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'supervisor_id')->withDefault();
     }
+
+    public function company()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
 }

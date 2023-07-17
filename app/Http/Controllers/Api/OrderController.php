@@ -153,8 +153,45 @@ class OrderController extends BaseController
         return $this->sendResponse($result, __('Data getting successfully'));
     }
 
-    public function getUserOrders($mode)
+    public function getUserOrders()
     {
+        // supervisor
+        if (auth()->user()->role == 'supervisor') {
+            if (auth()->user()->company()->id) {
+                $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'content', 'ticketData'])
+                    ->where('company_id', auth()->user()->company()->id)
+                    ->get();
+            }
+        } elseif (auth()->user()->role == 'company') { // company
+            $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'content', 'ticketData'])
+                ->where('company_id', auth()->user()->id)
+                ->get();
+        } else {
+            // normal users
+            $tickets = Ticket::with(['service'])
+                ->where('user_id', auth()->user()->id)
+                ->get();
+        }  }
 
+    public function changeStatus($id, Request $request)
+    {
+        if (auth()->user()->role != 'supervisor')
+            return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+
+        $order = Ticket::whereId($id)->first();
+
+        if ($order->type == 'company' || $order->type == 'supply')
+            if ($order->company->supervisor_id != auth()->user()->id)
+                return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+
+        $order->update(['status' => $request->get('status')]);
+
+        $result = [];
+        if ($order->type == 'company')
+            $result = new OrderTicketResource($order);
+        if ($order->type == 'supply')
+            $result = new OrderSupplyResource($order);
+
+        return $this->sendResponse($result, __('Saved successfully'));
     }
 }

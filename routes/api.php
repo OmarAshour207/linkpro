@@ -25,7 +25,9 @@ Route::group([
 
         Route::get('{mode}/order/{id}', [\App\Http\Controllers\Api\OrderController::class, 'get']);
 
-        Route::get('user/{mode}', [\App\Http\Controllers\Api\OrderController::class, 'getUserOrders']);
+        Route::get('order/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'changeStatus']);
+
+        Route::get('user/orders', [\App\Http\Controllers\Api\OrderController::class, 'getUserOrders']);
 
     });
 });

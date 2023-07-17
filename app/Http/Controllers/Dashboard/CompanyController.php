@@ -69,7 +69,6 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = User::whereId($id)->whereRole('company')->first();
-        dd($company);
         if(!$company)
             abort(404);
         $supervisors = User::supervisors()->orderBy('id')->get();
