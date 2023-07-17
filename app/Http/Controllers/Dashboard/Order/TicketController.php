@@ -19,7 +19,7 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = Ticket::whereType('ticket')
-            ->with('company', 'content')
+            ->with('ticketData', 'company')
             ->latest()
             ->paginate(20);
 
@@ -40,13 +40,25 @@ class TicketController extends Controller
             'floor_id'      => 'required|numeric',
             'path_id'       => 'required|numeric',
             'office_id'     => 'required|numeric',
-            'content_id'    => 'required|numeric',
+            'tickets'       => 'required'
         ]);
-        $data['notes'] = $data['notes'][$data['content_id']];
 
         $data['type'] = 'ticket';
         $data['user_id'] = auth()->user()->id;
-        Ticket::create($data);
+
+        $ticket = Ticket::create($data);
+
+        $tickets = $data['tickets'];
+
+        foreach ($tickets as $index => $ticketData) {
+            if(isset($ticketData['box'])) {
+                TicketData::create([
+                    'ticket_id'     => $ticket->id,
+                    'content_id'    => $ticketData['content_id'],
+                    'note'          => $ticketData['note']
+                ]);
+            }
+        }
 
         session()->flash('success', __('Saved successfully'));
         return redirect()->route('tickets.index');
@@ -59,6 +71,20 @@ class TicketController extends Controller
         $offices = Office::where('path_id', $ticket->path_id)->get();
         $contents = Content::where('office_id', $ticket->office_id)->get();
 
+        $contentsIds = [];
+
+        foreach ($ticket->ticketData as $data) {
+            foreach ($contents as $content) {
+                if($content->id == $data->content_id) {
+                    $contentsIds[$content->id] = [
+                        'note'              => $data->note,
+                        'ticket_data_id'    => $data->id
+                    ];
+                    break;
+                }
+            }
+        }
+
         return view('dashboard.orders.tickets.edit', [
             'ticket'    => $ticket,
             'companies' => $companies,
@@ -66,22 +92,34 @@ class TicketController extends Controller
             'paths'     => $paths,
             'offices'   => $offices,
             'contents'  => $contents,
+            'contentsIds'=> $contentsIds
         ]);
     }
 
     public function update(Ticket $ticket, Request $request)
     {
         $data = $request->validate([
-            'notes'         => 'sometimes|nullable|array',
-            'company_id'    => 'required|numeric',
-            'floor_id'      => 'required|numeric',
-            'path_id'       => 'required|numeric',
-            'office_id'     => 'required|numeric',
-            'content_id'    => 'required|numeric',
+            'notes'         => 'sometimes|nullable|string',
             'status'        => 'required|numeric',
-            'reason'        => Rule::requiredIf(fn() => ($request->status == 4))
+            'reason'        => Rule::requiredIf(fn() => ($request->status == 4)),
+            'tickets'       => 'required|array'
         ]);
-        $data['notes'] = $data['notes'][$data['content_id']];
+
+        $tickets = $data['tickets'];
+
+        foreach ($tickets as $index => $ticketData) {
+            if(isset($ticketData['box'])) {
+                unset($ticketData['box']);
+                TicketData::updateOrCreate(['id' => $ticketData['ticket_data_id'] ],
+                    [
+                        'ticket_id'     => $ticket->id,
+                        'content_id'    => $ticketData['content_id'],
+                        'note'          => $ticketData['note'],
+                    ]);
+            } elseif (isset($ticketData['ticket_data_id']) && $ticketData['ticket_data_id'] != 0 && !isset($ticketData['box'])) {
+                TicketData::whereId($ticketData['ticket_data_id'])->delete();
+            }
+        }
 
         $ticket->update($data);
         session()->flash('success', __('Saved successfully'));

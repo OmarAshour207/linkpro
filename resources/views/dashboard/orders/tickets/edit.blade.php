@@ -28,7 +28,7 @@
 
                     <div class="form-group col-lg-6">
                         <label for="user"> {{ __('Companies') }}</label>
-                        <select id="user" name="company_id" data-toggle="select" class="form-control company_id select2">
+                        <select id="user" name="company_id" data-toggle="select" class="form-control company_id select2" disabled>
                             <option value="" selected> {{ __('Companies') }} </option>
                             @forelse($companies as $company)
                                 <option value="{{ $company->id }}" {{ old('company_id', $ticket->company->id) == $company->id ? 'selected' : '' }}> {{ $company->name . ' -- ' . $company->email }} </option>
@@ -40,7 +40,7 @@
 
                     <div class="form-group col-lg-6">
                         <label for="floor_id"> {{ __('Floors') }}</label> <br>
-                        <select id="floor_id" name="floor_id" data-toggle="select" class="form-control select2 floors">
+                        <select id="floor_id" name="floor_id" data-toggle="select" class="form-control select2 floors" disabled>
                             @forelse($floors as $floor)
                                 <option value="{{ $floor->id }}" {{ $floor->id == $ticket->floor_id ? 'selected' : '' }}> {{ $floor->title }} </option>
                             @empty
@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="path_id"> {{ __('Paths') }}</label> <br>
-                            <select id="path_id" name="path_id" data-toggle="select" class="form-control select2 paths">
+                            <select id="path_id" name="path_id" data-toggle="select" class="form-control select2 paths" disabled>
                                 @forelse($paths as $path)
                                     <option value="{{ $path->id }}" {{ $path->id == $ticket->path_id ? 'selected' : '' }}> {{ $path->title }} </option>
                                 @empty
@@ -63,7 +63,7 @@
 
                         <div class="form-group col-lg-6">
                             <label for="office_id"> {{ __('Offices') }}</label> <br>
-                            <select id="office_id" name="office_id" data-toggle="select" class="form-control select2 offices">
+                            <select id="office_id" name="office_id" data-toggle="select" class="form-control select2 offices" disabled>
                                 @forelse($offices as $office)
                                     <option value="{{ $office->id }}" {{ $office->id == $ticket->office_id ? 'selected' : '' }}> {{ $office->title }} </option>
                                 @empty
@@ -112,10 +112,16 @@
                                 </thead>
                                 <tbody class="list" id="staff">
                                 @forelse($contents as $index => $content)
+                                    @if(key_exists($content->id, $contentsIds))
+                                        <input type="hidden" name="tickets[{{ $index }}][ticket_data_id]" value="{{ $contentsIds[$content->id]['ticket_data_id'] }}">
+                                    @else
+                                        <input type="hidden" name="tickets[{{ $index }}][ticket_data_id]" value="0">
+                                    @endif
                                     <tr class="selected">
+                                        <input type="hidden" name="tickets[{{ $index }}][content_id]" value="{{ $content->id }}">
                                         <td style="width: 18px;">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="radio" {{ $content->id == $ticket->content_id ? 'checked' : '' }} value="{{ $content->id }}" name="content_id" class="form-check-input" id="selectbox{{ $index }}">
+                                                <input type="checkbox" name="tickets[{{ $index }}][box]" {{ key_exists($content->id, $contentsIds) ? 'checked' : '' }} class="form-check-input" id="selectbox{{ $index }}">
                                                 <label class="form-check-label" for="selectbox{{ $index }}"><span class="text-hide">Check</span></label>
                                             </div>
                                         </td>
@@ -131,7 +137,7 @@
                                         <td style="width: 400px;">
                                             <div class="media align-items-center">
                                                 <div class="media-body">
-                                                    <input id="note" name="notes[{{ $content->id }}]" value="{{ $ticket->content_id == $content->id ? $ticket->notes : '' }}" type="text" class="form-control" placeholder="{{ __('Note') }}">
+                                                    <input id="note" name="tickets[{{ $index }}][note]" value="{{ key_exists($content->id, $contentsIds) ? $contentsIds[$content->id]['note'] : '' }}" type="text" class="form-control" placeholder="{{ __('Note') }}">
                                                 </div>
                                             </div>
                                         </td>

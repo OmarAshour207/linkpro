@@ -14,7 +14,7 @@ class Ticket extends Model
         'floor_id',
         'path_id',
         'office_id',
-        'content_id',
+
         'user_id',
         'service_id',
         'date',
@@ -50,11 +50,6 @@ class Ticket extends Model
     {
         return $this->belongsTo(Office::class, 'office_id');
     }
-    public function content()
-    {
-        return $this->belongsTo(Content::class, 'content_id');
-    }
-
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');

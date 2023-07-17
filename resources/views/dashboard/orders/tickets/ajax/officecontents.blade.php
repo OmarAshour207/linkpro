@@ -1,20 +1,23 @@
 <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
     <table class="table mb-0 thead-border-top-0">
-        <thead>
-        <tr>
-            <th style="width: 18px;">
-                {{ __('Select') }}
-            </th>
-            <th>{{ __('Content') }}</th>
-            <th> {{ __('Notes') }} </th>
-        </tr>
-        </thead>
+        @if(count($contents))
+            <thead>
+                <tr>
+                    <th style="width: 18px;">
+                        {{ __('Select') }}
+                    </th>
+                    <th>{{ __('Content') }}</th>
+                    <th> {{ __('Notes') }} </th>
+                </tr>
+            </thead>
+        @endif
         <tbody class="list" id="staff">
         @forelse($contents as $index => $content)
             <tr class="selected">
+                <input type="hidden" name="tickets[{{ $index }}][content_id]" value="{{ $content->id }}">
                 <td style="width: 18px;">
                     <div class="custom-control custom-checkbox">
-                        <input type="radio" name="content_id" value="{{ $content->id }}" class="form-check-input" id="selectbox{{ $index }}">
+                        <input type="checkbox" name="tickets[{{ $index }}][box]" class="form-check-input" id="selectbox{{ $index }}">
                         <label class="form-check-label" for="selectbox{{ $index }}"><span class="text-hide">Check</span></label>
                     </div>
                 </td>
@@ -22,7 +25,7 @@
                 <td style="width: 300px;">
                     <div class="media align-items-center">
                         <div class="media-body">
-                            <input id="content" name="content" type="text" class="form-control" placeholder="{{ __('Content') }}" value="{{ $content->content }}" disabled>
+                            <input id="content" type="text" class="form-control" placeholder="{{ __('Content') }}" value="{{ $content->content }}" disabled>
                         </div>
                     </div>
                 </td>
@@ -30,7 +33,7 @@
                 <td style="width: 400px;">
                     <div class="media align-items-center">
                         <div class="media-body">
-                            <input id="note" name="notes[{{ $content->id }}]" type="text" class="form-control" placeholder="{{ __('Note') }}">
+                            <input id="note" name="tickets[{{ $index }}][note]" type="text" class="form-control" placeholder="{{ __('Note') }}">
                         </div>
                     </div>
                 </td>

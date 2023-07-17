@@ -36,8 +36,8 @@
                             <th style="width: 10%;"> # </th>
                             <th style="width: 15%;"> {{ __('Company') }} </th>
                             <th style="width: 10%;"> {{ __('Mobile Number') }} </th>
-                            <th style="width: 20%;"> {{ __('Note') }} </th>
-                            <th style="width: 10%;"> {{ __('Office Content') }} </th>
+                            <th style="width: 10%;"> {{ __('Note') }} </th>
+                            <th style="width: 20%;"> {{ __('Office Content') }} -- {{ __('Note') }} </th>
                             <th style="width: 10%;"> {{ __('Created at') }} </th>
                             <th style="width: 10%;"> {{ __('Status') }} </th>
                             <th style="width: 10%;"> {{ __('Action') }} </th>
@@ -73,7 +73,7 @@
                                 </div>
                             </td>
 
-                            <td style="width: 20%;">
+                            <td style="width: 10%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
                                         {{ $ticket->notes }}
@@ -81,10 +81,17 @@
                                 </div>
                             </td>
 
-                            <td style="width: 10%;">
+                            <td style="width: 20%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{ $ticket->content->content }}
+                                        <ul>
+                                        @forelse($ticket->ticketData as $data)
+                                            <li>
+                                                {{ $data->content->content }} -- {{ $data->note }}
+                                            </li>
+                                        @empty
+                                        @endforelse
+                                        </ul>
                                     </div>
                                 </div>
                             </td>
