@@ -10,10 +10,8 @@ class ContentResource extends JsonResource
     {
         return [
             'id'         => $this->id,
+            'content'    => $this->content,
             'note'       => $this->note,
-            'office'     => new OfficeResource($this->office),
-            'path'       => new PathResource($this->path),
-            'floor'      => new FloorResource($this->floor),
             'created_at' => $this->created_at
         ];
     }

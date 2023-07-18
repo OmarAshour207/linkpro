@@ -23,11 +23,9 @@ Route::group([
 
         Route::post('requests/store', [\App\Http\Controllers\Api\OrderController::class, 'storeRequest']);
 
-        Route::get('{mode}/order/{id}', [\App\Http\Controllers\Api\OrderController::class, 'get']);
+        Route::get('user/orders', [\App\Http\Controllers\Api\OrderController::class, 'get']);
 
-        Route::get('order/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'changeStatus']);
-
-        Route::get('user/orders', [\App\Http\Controllers\Api\OrderController::class, 'getUserOrders']);
+        Route::post('order/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'changeStatus']);
 
     });
 });

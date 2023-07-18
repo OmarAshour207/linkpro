@@ -35,6 +35,7 @@ class SupplyController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         $data = $request->validate([
             'notes'       => 'sometimes|nullable|string',
             'company_id'  => 'required|numeric',

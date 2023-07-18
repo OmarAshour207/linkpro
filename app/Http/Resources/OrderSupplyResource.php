@@ -11,11 +11,13 @@ class OrderSupplyResource extends JsonResource
     {
         return [
             'id'        => $this->id,
+            'type'      => $this->type,
             'status'    => $this->status,
             'reason'    => $this->reason,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'supplies'  => TicketDataResource::collection($this->ticketData)
+            'created_at'=> $this->created_at,
+            'updated_at'=> $this->updated_at,
+            'company'   => new SampleCompanyResource($this->company),
+            'supplies'  => TicketDataSupplyResource::collection($this->ticketData)
         ];
     }
 }

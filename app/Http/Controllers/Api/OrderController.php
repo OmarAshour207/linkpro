@@ -8,6 +8,7 @@ use App\Http\Resources\OrderSupplyResource;
 use App\Http\Resources\OrderTicketResource;
 use App\Models\Ticket;
 use App\Models\TicketData;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,36 +21,44 @@ class OrderController extends BaseController
             'floor_id'   => 'required|numeric',
             'path_id'    => 'required|numeric',
             'office_id'  => 'required|numeric',
-            'content_id' => 'required|numeric',
+            'contents'   => 'required',
             'notes'      => 'sometimes|nullable|string',
         ]);
 
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $this->adaptErrorMessages($validator->errors()->getMessages()));
-        }
+        if ($validator->fails())
+            return $this->sendError(__('Validation Error'), $validator->errors()->getMessages());
 
         $data = $validator->validated();
         $data['type'] = 'ticket';
         $data['user_id'] = auth()->user()->id;
 
-        $result = Ticket::create($data);
+        $ticket = Ticket::create($data);
 
-        return $this->sendResponse($result, __('Saved successfully'));
+        foreach ($data['contents'] as $content) {
+            TicketData::create([
+                'ticket_id'     => $ticket->id,
+                'content_id'    => $content['content_id'],
+                'note'          => $content['note']
+            ]);
+        }
+
+        $result = Ticket::whereId($ticket->id)->with('ticketData')->first();
+
+        return $this->sendResponse(new OrderTicketResource($result), __('Saved successfully'));
     }
 
     public function storeRequest(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'service_id' => 'required|numeric',
-            'date'       => 'required|date_format:Y-n-j',
+            'date'       => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time'   => 'required|date_format:H:i',
             'notes'      => 'sometimes|nullable|string',
         ]);
 
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $this->adaptErrorMessages($validator->errors()->getMessages()));
-        }
+        if ($validator->fails())
+            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
 
         $data = $validator->validated();
         $data['type'] = 'request';
@@ -58,7 +67,6 @@ class OrderController extends BaseController
         $result = Ticket::create($data);
 
         return $this->sendResponse($result, __('Saved successfully'));
-
     }
 
     public function storeSupply(Request $request)
@@ -66,12 +74,11 @@ class OrderController extends BaseController
         $validator = Validator::make($request->all(), [
             'company_id'    => 'required|numeric',
             'notes'         => 'sometimes|nullable|string',
-            'supplies'      => 'required|array'
+            'supplies'      => 'required'
         ]);
 
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $this->adaptErrorMessages($validator->errors()->getMessages()));
-        }
+        if ($validator->fails())
+            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
 
         $data = $validator->validated();
         $data['type'] = 'supply';
@@ -95,83 +102,34 @@ class OrderController extends BaseController
         return $this->sendResponse($result, __('Saved successfully'));
     }
 
-    public function get($mode, $id)
+    public function get()
     {
-        if ($mode == 'request') {
-            return $this->getRequest($id);
-        } elseif ($mode == 'supplies') {
-            return $this->getSupplies($id);
-        } elseif ($mode == 'company') {
-            return $this->getCompany($id);
+        $companyId = [];
+
+        if(auth()->user()->role == 'company')
+            $companyId = [auth()->user()->id];
+        elseif (auth()->user()->role == 'supervisor') {
+            $companyId = User::where('supervisor_id', auth()->user()->id)->pluck('id');
         }
-        return $this->sendError('s_authError', [__('Mode not available')]);
-    }
 
-    public function getRequest($id)
-    {
-        $request = Ticket::with('service')
-            ->whereType('request')
-            ->whereId($id)
-            ->first();
+        $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'ticketData', 'service'])
+            ->whereIn('type', ['ticket', 'supply', 'request'])
+            ->whereIn('company_id', $companyId)
+            ->orWhere('user_id', auth()->user()->id)
+            ->get()
+            ->groupBy(function ($data) {
+                return $data->type;
+            });
 
-        if ($request->user_id != auth()->user()->id)
-            return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+        if (count($tickets) < 1)
+            return $this->sendError(__('Empty'), [__('Empty Order')], 401);
 
-        $result = new OrderRequestResource($request);
+        $result['tickets'] = isset($tickets['ticket']) ? OrderTicketResource::collection($tickets['ticket']) : [];
+        $result['supplies'] = isset($tickets['supply']) ? OrderSupplyResource::collection($tickets['supply']) : [];
+        $result['requests'] = isset($tickets['request']) ? OrderRequestResource::collection($tickets['request']) : [];
+
         return $this->sendResponse($result, __('Data getting successfully'));
     }
-
-    public function getSupplies($id)
-    {
-        $supply = Ticket::with('ticketData', 'company')
-            ->whereType('supply')
-            ->whereId($id)
-            ->first();
-
-        if ($supply->user_id != auth()->user()->id)
-            if (auth()->user()->role == 'supervisor')
-                if ($supply->company->supervisor_id != auth()->user()->id)
-                    return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
-
-        $result = new OrderSupplyResource($supply);
-        return $this->sendResponse($result, __('Data getting successfully'));
-    }
-
-    public function getCompany($id)
-    {
-        $ticket = Ticket::with(['company', 'floor', 'path', 'office', 'content'])
-            ->whereType('ticket')
-            ->whereId($id)
-            ->first();
-
-        if ($ticket->user_id != auth()->user()->id)
-            if (auth()->user()->role == 'supervisor')
-                if ($ticket->company->supervisor_id != auth()->user()->id)
-                    return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
-
-        $result = new OrderTicketResource($ticket);
-        return $this->sendResponse($result, __('Data getting successfully'));
-    }
-
-    public function getUserOrders()
-    {
-        // supervisor
-        if (auth()->user()->role == 'supervisor') {
-            if (auth()->user()->company()->id) {
-                $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'content', 'ticketData'])
-                    ->where('company_id', auth()->user()->company()->id)
-                    ->get();
-            }
-        } elseif (auth()->user()->role == 'company') { // company
-            $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'content', 'ticketData'])
-                ->where('company_id', auth()->user()->id)
-                ->get();
-        } else {
-            // normal users
-            $tickets = Ticket::with(['service'])
-                ->where('user_id', auth()->user()->id)
-                ->get();
-        }  }
 
     public function changeStatus($id, Request $request)
     {
@@ -180,14 +138,14 @@ class OrderController extends BaseController
 
         $order = Ticket::whereId($id)->first();
 
-        if ($order->type == 'company' || $order->type == 'supply')
+        if ($order->type == 'ticket' || $order->type == 'supply')
             if ($order->company->supervisor_id != auth()->user()->id)
                 return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
 
         $order->update(['status' => $request->get('status')]);
 
         $result = [];
-        if ($order->type == 'company')
+        if ($order->type == 'ticket')
             $result = new OrderTicketResource($order);
         if ($order->type == 'supply')
             $result = new OrderSupplyResource($order);

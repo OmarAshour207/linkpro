@@ -12,21 +12,17 @@ class CompanyController extends BaseController
     public function get()
     {
         if(auth()->user()->role != 'company')
-            return $this->sendError(['Auth Error!', ['s_authError']], 401);
+            return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
 
         $company = User::with('floors.paths.offices.contents', 'supervisor')
             ->whereRole('company')
             ->whereId(auth()->user()->id)
             ->first();
 
-        if(count($company) < 1)
-            return $this->sendError(['Auth Error!', ['s_authError']], 401);
+        if(!$company)
+            return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
 
         return $this->sendResponse(new CompanyResource($company), __('Company'));
     }
 
-    public function edit($id, Request $request)
-    {
-
-    }
 }
