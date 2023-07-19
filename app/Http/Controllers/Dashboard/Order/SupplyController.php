@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Order;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Content;
 use App\Models\Floor;
 use App\Models\Office;
@@ -35,7 +36,6 @@ class SupplyController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
         $data = $request->validate([
             'notes'       => 'sometimes|nullable|string',
             'company_id'  => 'required|numeric',
@@ -67,6 +67,7 @@ class SupplyController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
         $supplies = Supply::where('user_id', $ticket->company_id)->get();
+        $comments = Comment::with('user')->where('ticket_id', $ticket->id)->get();
 
         $suppliesIds = [];
 
@@ -83,7 +84,8 @@ class SupplyController extends Controller
             }
         }
 
-        return view('dashboard.orders.supplies.edit', compact('ticket', 'supplies', 'suppliesIds'));
+        return view('dashboard.orders.supplies.edit',
+            compact('ticket', 'supplies', 'suppliesIds', 'comments'));
     }
 
     public function update($id, Request $request)

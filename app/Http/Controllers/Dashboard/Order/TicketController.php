@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Order;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Content;
 use App\Models\Floor;
 use App\Models\Office;
@@ -19,7 +20,7 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = Ticket::whereType('ticket')
-            ->with('ticketData', 'company')
+            ->with('ticketData', 'company', 'comments')
             ->latest()
             ->paginate(20);
 
@@ -34,7 +35,6 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
         $data = $request->validate([
             'notes'         => 'sometimes|nullable',
             'company_id'    => 'required|numeric',
@@ -71,6 +71,7 @@ class TicketController extends Controller
         $paths = Path::where('floor_id', $ticket->floor_id)->get();
         $offices = Office::where('path_id', $ticket->path_id)->get();
         $contents = Content::where('office_id', $ticket->office_id)->get();
+        $comments = Comment::with('user')->where('ticket_id', $ticket->id)->get();
 
         $contentsIds = [];
 
@@ -93,7 +94,8 @@ class TicketController extends Controller
             'paths'     => $paths,
             'offices'   => $offices,
             'contents'  => $contents,
-            'contentsIds'=> $contentsIds
+            'contentsIds'=> $contentsIds,
+            'comments'  => $comments
         ]);
     }
 

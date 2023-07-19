@@ -177,5 +177,10 @@
     "Select": "أختر",
     "Create new Supply": "أنشاء مواد جديده",
     "New supply added for company ": "تم أضافه مواد خام جديده للشركة ",
-    "Empty Office": "مكتب فارغ"
+    "Empty Office": "مكتب فارغ",
+    "Order Details": "تفاصيل الطلب",
+    "Comments": "التعليقات",
+    "Username": "أسم المستخدم",
+    "Comment": "التعليق",
+    "Ticket": "التذكره"
 }

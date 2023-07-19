@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Order;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Content;
 use App\Models\Floor;
 use App\Models\Office;
@@ -57,7 +58,8 @@ class RequestController extends Controller
         $request = Ticket::findOrFail($id);
         $users = User::whereRole('user')->get();
         $services = Service::all();
-        return view('dashboard.orders.requests.edit', compact('users', 'request', 'services'));
+        $comments = Comment::with('user')->where('ticket_id', $id)->get();
+        return view('dashboard.orders.requests.edit', compact('users', 'request', 'services', 'comments'));
  }
 
     public function update($id, Request $request)

@@ -27,6 +27,8 @@ Route::group([
 
         Route::post('order/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'changeStatus']);
 
+        Route::post('comment/store', [\App\Http\Controllers\Api\OrderController::class, 'storeComment']);
+
     });
 });
 

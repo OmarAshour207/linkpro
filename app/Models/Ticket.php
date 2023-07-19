@@ -59,4 +59,9 @@ class Ticket extends Model
         return $this->hasMany(TicketData::class, 'ticket_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'ticket_id');
+    }
+
 }

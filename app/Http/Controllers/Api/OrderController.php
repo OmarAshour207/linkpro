@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\OrderRequestResource;
 use App\Http\Resources\OrderSupplyResource;
 use App\Http\Resources\OrderTicketResource;
+use App\Models\Comment;
 use App\Models\Ticket;
 use App\Models\TicketData;
 use App\Models\User;
@@ -102,6 +104,7 @@ class OrderController extends BaseController
         return $this->sendResponse($result, __('Saved successfully'));
     }
 
+    // TODO check for admin
     public function get()
     {
         $companyId = [];
@@ -131,6 +134,7 @@ class OrderController extends BaseController
         return $this->sendResponse($result, __('Data getting successfully'));
     }
 
+    // TODO check for admin
     public function changeStatus($id, Request $request)
     {
         if (auth()->user()->role != 'supervisor')
@@ -149,6 +153,27 @@ class OrderController extends BaseController
             $result = new OrderTicketResource($order);
         if ($order->type == 'supply')
             $result = new OrderSupplyResource($order);
+
+        return $this->sendResponse($result, __('Saved successfully'));
+    }
+
+    public function storeComment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'ticket_id'    => 'required|numeric',
+            'content'      => 'required|string',
+        ]);
+
+        if ($validator->fails())
+            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+
+        $data = $validator->validated();
+        $data['user_id'] = auth()->user()->id;
+
+        $comment = Comment::create($data);
+        $comment = Comment::with('ticket', 'user')->find($comment->id);
+
+        $result = new CommentResource($comment);
 
         return $this->sendResponse($result, __('Saved successfully'));
     }
