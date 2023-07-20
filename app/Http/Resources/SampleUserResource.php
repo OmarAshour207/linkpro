@@ -14,7 +14,7 @@ class SampleUserResource extends JsonResource
             'email' => $this->email,
             'phonenumber' => $this->phonenumber,
             'role'      => $this->role,
-            'image'     => $this->image,
+            'image'     => $this->userImage,
             'created_at' => $this->created_at,
         ];
     }

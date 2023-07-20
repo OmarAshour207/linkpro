@@ -55,7 +55,7 @@
                             <div class="col-sm-auto">
                                 <div class="form-group">
                                     <label for="filter_name">{{ __('Search') }}</label>
-                                    <input id="filter_name" value="{{ request()->get('search') }}" name="search" type="text" class="form-control" placeholder="{{ __('Search by name or Phone Number') }}" style="width: 300px;">
+                                    <input id="filter_name" value="{{ request()->get('search') }}" name="search" type="text" class="form-control" placeholder="{{ __('Search by name or Phone Number') }}" style="width: 250px;">
                                 </div>
                             </div>
                             <div class="col-sm-auto">
@@ -108,6 +108,113 @@
                         </div>
                     </div>
                 </form>
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-responsive" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
+
+                    <table class="table mb-0 thead-border-top-0 table-striped">
+                        <thead>
+                        <tr>
+
+                            <th style="width: 30px;" class="text-center">#ID</th>
+                            <th>Company Name</th>
+                            <th style="width: 120px;" class="text-center">Created</th>
+                            <th class="text-center">Members</th>
+                            <th class="text-center">Growth</th>
+                            <th style="width: 50px;">#INV</th>
+                            <th style="width: 120px;" class="text-right">Total Sales</th>
+                            <th style="width: 50px;">
+                                <div class="dropdown pull-right">
+                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Bulk</a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="material-icons  mr-1">work</i> Update Status</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="material-icons  mr-1">pin_drop</i> Add Location</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="material-icons  mr-1">archive</i> Archive</a>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="list" id="companies">
+                        <tr>
+                            <td>
+                                <div class="badge badge-soft-dark">#29178</div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="material-icons icon-16pt mr-1 text-blue">business</i>
+                                        <a href="#">Moon Ltd</a>
+                                    </div>
+
+                                    <div class="badge badge-warning ml-2">PRO</div>
+
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted"><i class="material-icons icon-16pt mr-1">pin_drop</i> Miami, Florida, USA</small>
+                                </div>
+                            </td>
+                            <td style="width: 140px;"><i class="material-icons icon-16pt text-muted-light mr-1">today</i> 05-05-2019</td>
+                            <td style="width:80px" class="text-center">
+
+
+                                <i class="material-icons icon-16pt text-muted mr-1">account_circle</i> <a href="#">1</a>
+
+                            </td>
+                            <td class="text-center">3% <i class="material-icons icon-16pt text-success">arrow_upward</i></td>
+                            <td class="text-center">1</td>
+                            <td class="text-right"><strong>$32,124</strong></td>
+                            <td><a href="#" class="btn btn-sm btn-link"><i class="material-icons icon-16pt">arrow_forward</i></a> </td>
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <div class="badge badge-soft-dark">#29179</div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="material-icons icon-16pt mr-1 text-blue">business</i>
+                                        <a href="#">Blue Space Ltd</a>
+                                    </div>
+
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted"><i class="material-icons icon-16pt mr-1">pin_drop</i> Miami, Florida, USA</small>
+                                </div>
+                            </td>
+                            <td style="width: 140px;"><i class="material-icons icon-16pt text-muted-light mr-1">today</i> 05-05-2019</td>
+                            <td style="width:80px" class="text-center">
+
+
+                                <i class="material-icons icon-16pt text-muted mr-1">account_circle</i> <a href="#">2</a>
+
+                            </td>
+                            <td class="text-center">5% <i class="material-icons icon-16pt text-success">arrow_upward</i></td>
+                            <td class="text-center">2</td>
+                            <td class="text-right"><strong>$13,593</strong></td>
+                            <td><a href="#" class="btn btn-sm btn-link"><i class="material-icons icon-16pt">arrow_forward</i></a> </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-body text-right">
+                    15 <span class="text-muted">of 1,430</span> <a href="#" class="text-muted-light"><i class="material-icons ml-1">arrow_forward</i></a>
+                </div>
+
+
             </div>
 
         </div>
