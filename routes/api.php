@@ -15,7 +15,9 @@ Route::group([
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
-        Route::get('user/get', [\App\Http\Controllers\Api\CompanyController::class, 'get']);
+        Route::get('company/get', [\App\Http\Controllers\Api\CompanyController::class, 'getCompany']);
+
+        Route::get('user/get', [\App\Http\Controllers\Api\CompanyController::class, 'getUser']);
 
         Route::post('tickets/store', [\App\Http\Controllers\Api\OrderController::class, 'storeTicket']);
 

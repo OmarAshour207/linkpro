@@ -20,7 +20,8 @@ class OrderTicketResource extends JsonResource
             'floor'   => new SampleFloorResource($this->floor),
             'path'    => new SamplePathResource($this->path),
             'office'  => new SampleOfficeResource($this->office),
-            'ticket_data' => TicketDataTicketResource::collection($this->ticketData),
+            'ticket_data'   => TicketDataTicketResource::collection($this->ticketData),
+            'comments'      => CommentResource::collection($this->comments)
         ];
     }
 }

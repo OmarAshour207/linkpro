@@ -19,7 +19,8 @@ class OrderRequestResource extends JsonResource
             'reason'    => $this->reason,
             'created_at'=> $this->created_at,
             'updated_at'=> $this->updated_at,
-            'service'   => new ServiceResource($this->service)
+            'service'   => new ServiceResource($this->service),
+            'comments'  => CommentResource::collection($this->comments)
         ];
     }
 }

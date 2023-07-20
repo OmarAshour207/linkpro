@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class CompanyController extends BaseController
 {
-    public function get()
+    public function getCompany()
     {
         if(auth()->user()->role == 'company') {
             $company = User::with('floors.paths.offices.contents', 'supervisor')
@@ -19,32 +19,34 @@ class CompanyController extends BaseController
                 ->whereId(auth()->user()->id)
                 ->first();
 
-            if(!$company)
-                return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
+            if($company)
+                return $this->sendResponse(new CompanyResource($company), __('Company'));
+        }
 
-            return $this->sendResponse(new CompanyResource($company), __('Company'));
-        } elseif (auth()->user()->role == 'supervisor') {
+        return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
+    }
+
+    public function getUser()
+    {
+        if (auth()->user()->role == 'supervisor') {
             $supervisor = User::with('company')
                 ->whereRole('supervisor')
                 ->whereId(auth()->user()->id)
                 ->first();
 
-            if(!$supervisor)
-                return $this->sendError(__('Not Found!'), ['s_notFound'], 401);
+            if($supervisor)
+                return $this->sendResponse(new SupervisorResource($supervisor), __('Supervisor'));
 
-            return $this->sendResponse(new SupervisorResource($supervisor), __('Supervisor'));
         } elseif (auth()->user()->role == 'user') {
             $user = User::whereRole('user')
                 ->whereId(auth()->user()->id)
                 ->first();
 
-            if(!$user)
-                return $this->sendError(__('Not Found!'), ['s_notFound'], 401);
-
-            return $this->sendResponse(new SampleUserResource($user), __('User'));
-        } else {
-            return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
+            if($user)
+                return $this->sendResponse(new SampleUserResource($user), __('User'));
         }
+
+        return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
     }
 
 }
