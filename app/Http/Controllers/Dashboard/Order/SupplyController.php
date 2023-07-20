@@ -67,7 +67,7 @@ class SupplyController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
         $supplies = Supply::where('user_id', $ticket->company_id)->get();
-        $comments = Comment::with('user')->where('ticket_id', $ticket->id)->get();
+        $comments = Comment::with('user')->where('ticket_id', $ticket->id)->orderBy('id', 'desc')->get();
 
         $suppliesIds = [];
 

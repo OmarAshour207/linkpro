@@ -38,6 +38,8 @@ Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {
 
     Route::post('office/contents', [\App\Http\Controllers\Dashboard\Order\TicketController::class, 'showContents'])->name('office.contents');
 
+    Route::post('comments/store', [\App\Http\Controllers\Dashboard\Order\CommentController::class, 'store'])->name('comments.store');
+
     Route::get('profile/edit', [App\Http\Controllers\Dashboard\ProfileController::class, 'edit'])->name('edit.profile');
     Route::post('profile/edit', [App\Http\Controllers\Dashboard\ProfileController::class, 'update'])->name('update.profile');
 

@@ -71,7 +71,7 @@ class TicketController extends Controller
         $paths = Path::where('floor_id', $ticket->floor_id)->get();
         $offices = Office::where('path_id', $ticket->path_id)->get();
         $contents = Content::where('office_id', $ticket->office_id)->get();
-        $comments = Comment::with('user')->where('ticket_id', $ticket->id)->get();
+        $comments = Comment::with('user')->where('ticket_id', $ticket->id)->orderBy('id', 'desc')->get();
 
         $contentsIds = [];
 

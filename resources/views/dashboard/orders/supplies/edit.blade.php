@@ -193,8 +193,23 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
+                        <form method="post" action="{{ route('comments.store') }}">
+
+                            @csrf
+                            @include('dashboard.partials._errors')
+
+                            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+
+                            <div class="form-group">
+                                <label for="content">{{ __("Add Comment") }}</label>
+                                <textarea id="content" name="content" rows="3" class="form-control" placeholder="{{ __("Comment") }}...">{{ old("content") }}</textarea>
+                            </div>
+
+                            <div class="text-right mb-5">
+                                <input type="submit" class="btn btn-success" value="{{ __('Add Comment') }}">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

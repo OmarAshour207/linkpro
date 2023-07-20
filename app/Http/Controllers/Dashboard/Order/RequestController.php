@@ -58,7 +58,7 @@ class RequestController extends Controller
         $request = Ticket::findOrFail($id);
         $users = User::whereRole('user')->get();
         $services = Service::all();
-        $comments = Comment::with('user')->where('ticket_id', $id)->get();
+        $comments = Comment::with('user')->where('ticket_id', $id)->orderBy('id', 'desc')->get();
         return view('dashboard.orders.requests.edit', compact('users', 'request', 'services', 'comments'));
  }
 
