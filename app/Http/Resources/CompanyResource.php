@@ -18,8 +18,8 @@ class CompanyResource extends JsonResource
             'address'       => $this->address,
             'lat'           => $this->lat,
             'lng'           => $this->lng,
-            'supervisor'    => new SupervisorResource($this->supervisor),
             'created_at'    => $this->created_at,
+            'supervisor'    => new SupervisorResource($this->supervisor),
             'floors'        => FloorResource::collection($this->floors)
         ];
     }

@@ -36,14 +36,14 @@ class OrderController extends BaseController
 
         $ticket = Ticket::create($data);
 
-        foreach ($data['contents'] as $content) {
-            TicketData::create([
-                'ticket_id'     => $ticket->id,
-                'content_id'    => $content['content_id'],
-                'note'          => $content['note']
-            ]);
+        if (isset($data['contents'])) {
+            for ($i = 0;$i < count($data['contents']);$i++) {
+                TicketData::create([
+                    'ticket_id'     => $ticket->id,
+                    'content_id'    => $data['contents'][$i],
+                ]);
+            }
         }
-
         $result = Ticket::whereId($ticket->id)->with('ticketData')->first();
 
         return $this->sendResponse(new OrderTicketResource($result), __('Saved successfully'));

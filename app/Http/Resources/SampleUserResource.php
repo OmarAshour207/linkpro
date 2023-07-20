@@ -10,7 +10,11 @@ class SampleUserResource extends JsonResource
     {
         return [
             'id'    => $this->id,
-            'name'  => $this->name
+            'name'  => $this->name,
+            'email' => $this->email,
+            'phonenumber' => $this->phonenumber,
+            'role'      => $this->role,
+            'image'     => $this->image
         ];
     }
 }

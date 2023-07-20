@@ -14,6 +14,9 @@ class SupervisorResource extends JsonResource
             'email'         => $this->email,
             'phonenumber'   => $this->phonenumber,
             'image'         => $this->image,
+            'role'          => $this->role,
+            'create_at'     => $this->created_at,
+            'company'       => new SampleCompanyResource($this->company)
         ];
     }
 }
