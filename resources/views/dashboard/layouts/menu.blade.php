@@ -4,19 +4,10 @@
             <div class="sidebar-heading">{{ __('Menu') }}</div>
             <ul class="sidebar-menu">
                 <li class="sidebar-menu-item open">
-                    <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu" aria-expanded="true">
+                    <a class="sidebar-menu-button" href="{{ route('dashboard.index') }}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
                         <span class="sidebar-menu-text"> {{ __('Dashboard') }} </span>
-                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
                     </a>
-                    <ul class="sidebar-submenu collapse show" id="dashboards_menu">
-                        <li class="sidebar-menu-item">
-                            <a class="sidebar-menu-button" href="{{ route('dashboard.index') }}">
-                                <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-chart-bar"></i>
-                                <span class="sidebar-menu-text"> {{ __('Stat') }} </span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 {{-- Services --}}

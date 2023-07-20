@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,6 +14,14 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('dashboard.home');
+        $tickets =
+            Ticket::whenSearch(\request()->get('search'))
+            ->whenType(\request()->get('type'))
+            ->whenFrom(\request()->get('from'))
+            ->whenTo(\request()->get('to'))
+            ->whenStatus(\request()->get('status'))
+            ->get();
+
+        return view('dashboard.home', compact('tickets'));
     }
 }

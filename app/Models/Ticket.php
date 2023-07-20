@@ -26,26 +26,23 @@ class Ticket extends Model
         'reason'
     ];
 
+    // Relations
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
     public function company()
     {
         return $this->belongsTo(User::class, 'company_id');
     }
-
     public function floor()
     {
         return $this->belongsTo(Floor::class, 'floor_id');
     }
-
     public function path()
     {
         return $this->belongsTo(Path::class, 'path_id');
     }
-
     public function office()
     {
         return $this->belongsTo(Office::class, 'office_id');
@@ -58,10 +55,47 @@ class Ticket extends Model
     {
         return $this->hasMany(TicketData::class, 'ticket_id');
     }
-
     public function comments()
     {
         return $this->hasMany(Comment::class, 'ticket_id');
     }
 
+    // Scopes
+
+    public function scopeWhenSearch($query, $search)
+    {
+        return $query->when($search, function ($q) use ($search) {
+            return $q->whereHas('company', function ($qu) use ($search) {
+                return $qu->where('name', 'like', "%$search%")
+                    ->orWhere('phonenumber', 'like', "%$search%");
+            });
+        });
+    }
+
+    public function scopeWhenType($query, $type)
+    {
+        return $query->when($type, function ($q) use ($type) {
+            return $q->where('type', $type);
+        });
+    }
+    public function scopeWhenFrom($query, $from)
+    {
+        return $query->when($from, function ($q) use ($from) {
+            return $q->where('created_at', '>=', $from . ' 00:00:00');
+        });
+    }
+    public function scopeWhenTo($query, $to)
+    {
+        return $query->when($to, function ($q) use ($to) {
+            return $q->where('created_at', '<=', $to . ' 00:00:00');
+        });
+    }
+    public function scopeWhenStatus($query, $status)
+    {
+        return $query->when($status, function ($q) use ($status) {
+            if ($status == 'all')
+                return $q;
+            return $q->where('status', $status);
+        });
+    }
 }
