@@ -189,5 +189,17 @@
     "Type": "النوع",
     "Search by name": "أبحث بالاسم",
     "All": "الكل",
-    "Add Comment": "أضافة تعليق"
+    "Add Comment": "أضافة تعليق",
+    "Total Orders ": "اجمالي طلبات ",
+    "ticket": "التذاكر",
+    "supply": "المواد الخام",
+    "request": "الطلبات",
+    "Reason in rejection": "السبب في حالة الرفض",
+    "Search": "بحث",
+    "Export Data": "تحميل",
+    "Search by name or Phone Number": "أبحث بواسطه الاسم او رقم الهاتف",
+    "Recent Orders": "أخر الطلبات",
+    "Export Reports in Excel": "تصدير التقارير الي اكسل",
+    "ID": "#",
+    "Service": "الخدمة"
 }

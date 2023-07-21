@@ -71,13 +71,6 @@ class Ticket extends Model
             });
         });
     }
-
-    public function scopeWhenType($query, $type)
-    {
-        return $query->when($type, function ($q) use ($type) {
-            return $q->where('type', $type);
-        });
-    }
     public function scopeWhenFrom($query, $from)
     {
         return $query->when($from, function ($q) use ($from) {

@@ -4,7 +4,7 @@
             <div class="sidebar-heading">{{ __('Menu') }}</div>
             <ul class="sidebar-menu">
                 <li class="sidebar-menu-item open">
-                    <a class="sidebar-menu-button" href="{{ route('dashboard.index') }}">
+                    <a class="sidebar-menu-button" href="{{ route('dashboard.index', ['type' => 'ticket']) }}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
                         <span class="sidebar-menu-text"> {{ __('Dashboard') }} </span>
                     </a>

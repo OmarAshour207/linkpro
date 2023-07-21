@@ -21,199 +21,209 @@
         <div class="container-fluid page__container">
 
             <div class="card-group">
-                <div class="card card-body text-center">
-
-                    <div class="d-flex flex-row align-items-center">
-                        <div class="card-header__title m-0"> <i class="material-icons icon-muted icon-30pt">assessment</i> Visits</div>
-                        <div class="text-amount ml-auto">3,642</div>
-                    </div>
-                </div>
-                <div class="card card-body text-center">
-                    <div class="d-flex flex-row align-items-center">
-                        <div class="card-header__title m-0"><i class="material-icons icon-muted icon-30pt">shopping_basket</i> Purchases</div>
-                        <div class="text-amount ml-auto">&dollar;12,311</div>
-                    </div>
-                </div>
-                <div class="card card-body text-center">
-                    <div class="d-flex flex-row align-items-center">
-                        <div class="card-header__title m-0"><i class="material-icons  icon-muted icon-30pt">perm_identity</i> Customers</div>
-                        <div class="text-amount ml-auto">78</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card card-form d-flex flex-column flex-sm-row">
-                <form method="get">
-                    <div class="ml-auto">
-                        <button class="btn btn-primary" type="submit">
-                            {{ __('Export Data') }} <i class="material-icons">file_download</i>
-                        </button>
-                    </div>
-
-                    <div class="card-form__body card-body-form-group flex">
-                        <div class="row">
-                            <div class="col-sm-auto">
-                                <div class="form-group">
-                                    <label for="filter_name">{{ __('Search') }}</label>
-                                    <input id="filter_name" value="{{ request()->get('search') }}" name="search" type="text" class="form-control" placeholder="{{ __('Search by name or Phone Number') }}" style="width: 250px;">
-                                </div>
+                @foreach($ordersCount as $count)
+                    <div class="card card-body text-center">
+                        <div class="d-flex flex-row align-items-center">
+                            <div class="card-header__title m-0">
+                                <i class="material-icons icon-muted icon-30pt">assessment</i>
+                                {{ __('Total Orders ') . __($count->type) }}
                             </div>
-                            <div class="col-sm-auto">
-                                <div class="form-group">
-                                    <label for="filter_category">{{ __('Type') }}</label><br>
-                                    <select id="filter_category" class="custom-select" style="width: 150px;" name="type">
-                                        <option value="ticket">{{ __('Tickets') }}</option>
-                                        <option value="supply">{{ __('Supplies') }}</option>
-                                        <option value="request">{{ __('Requests') }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            @php
-                                // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
-                                $status = [
-                                    1     => __('On hold'),
-                                    2     => __('Under Processing'),
-                                    3     => __('Approved'),
-                                    4     => __('Rejected'),
-                                    5     => __('Delayed')
-                                ];
-                            @endphp
-                            <div class="col-sm-auto">
-                                <div class="form-group">
-                                    <label for="filter_status">{{ __('Status') }}</label><br>
-                                    <select id="filter_status" class="custom-select" style="width: 150px;" name="status">
-                                        <option value="all">{{ __('All') }}</option>
-                                        @foreach($status as $key => $state)
-                                            <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}> {{ $state }} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-auto">
-                                <div class="form-group" style="width: 200px;">
-                                    <label for="filter_date">{{ __('From') }}</label>
-                                    <input id="filter_date" type="text" name="from" class="form-control date_from" placeholder="{{ __('Select date') }}" value="{{ request()->get('from') ?? '01/01/2023' }}" data-toggle="flatpickr" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">
-                                </div>
-                            </div>
-                            <div class="col-sm-auto">
-                                <div class="form-group" style="width: 200px;">
-                                    <label for="filter_date_to">{{ __('To') }}</label>
-                                    <input id="filter_date_to" type="text" name="to" class="form-control date_to" placeholder="{{ __('Select date') }}" value="{{ request()->get('to') ?? now() }}" data-toggle="flatpickr" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn bg-white border-left border-top border-top-sm-0 rounded-top-0 rounded-top-sm rounded-left-sm-0">
-                                <i class="fa fa-arrow-alt-circle-{{ session('locale') == 'ar' ? 'left' : 'right' }} fa-2x"></i>
-                            </button>
-
+                            <div class="text-amount ml-auto">{{ $count->count }}</div>
                         </div>
                     </div>
-                </form>
+                @endforeach
             </div>
 
+            @php
+                // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
+                $status = [
+                    1     => __('On hold'),
+                    2     => __('Under Processing'),
+                    3     => __('Approved'),
+                    4     => __('Rejected'),
+                    5     => __('Delayed')
+                ];
+            @endphp
+
+            <div class="card-group">
+                @foreach($ordersCountStatus as $orderStatus)
+                    <div class="card card-body text-center">
+                        <div class="d-flex flex-row align-items-center">
+                            <div class="card-header__title m-0">
+                                <i class="material-icons icon-muted icon-30pt">assessment</i>
+                                {{  __($status[$orderStatus->status]) }}
+                            </div>
+                            <div class="text-amount ml-auto">{{ $orderStatus->count }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
 
             <div class="card">
+                <div class="card-header card-header-large bg-white d-flex align-items-center">
+                    <h4 class="card-header__title flex m-0">{{ __('Export Reports in Excel') }}</h4>
+                </div>
+
+                <div class="card-form d-flex flex-column flex-sm-row">
+
+                    <form method="post" action="{{ route('orders.export') }}">
+
+                        @csrf
+                        @method('post')
+
+                        <div class="card-form__body card-body-form-group flex">
+                            <div class="row">
+                                <div class="col-sm-auto">
+                                    <div class="form-group">
+                                        <label for="filter_name">{{ __('Search') }}</label>
+                                        <input id="filter_name" value="{{ request()->get('search') }}" name="search" type="text" class="form-control" placeholder="{{ __('Search by name or Phone Number') }}" style="width: 250px;">
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="form-group">
+                                        <label for="filter_category">{{ __('Type') }}</label><br>
+                                        <select id="filter_category" class="custom-select" style="width: 150px;" name="type">
+                                            <option value="ticket">{{ __('Tickets') }}</option>
+                                            <option value="supply">{{ __('Supplies') }}</option>
+                                            <option value="request">{{ __('Requests') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                @php
+                                    // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
+                                    $status = [
+                                        1     => __('On hold'),
+                                        2     => __('Under Processing'),
+                                        3     => __('Approved'),
+                                        4     => __('Rejected'),
+                                        5     => __('Delayed')
+                                    ];
+                                @endphp
+                                <div class="col-sm-auto">
+                                    <div class="form-group">
+                                        <label for="filter_status">{{ __('Status') }}</label><br>
+                                        <select id="filter_status" class="custom-select" style="width: 150px;" name="status">
+                                            <option value="all">{{ __('All') }}</option>
+                                            @foreach($status as $key => $state)
+                                                <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}> {{ $state }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="form-group" style="width: 175px;">
+                                        <label for="filter_date">{{ __('From') }}</label>
+                                        <input id="filter_date" type="text" name="from" class="form-control date_from" placeholder="{{ __('Select date') }}" value="{{ request()->get('from') ?? '01/01/2023' }}" data-toggle="flatpickr" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="form-group" style="width: 175px;">
+                                        <label for="filter_date_to">{{ __('To') }}</label>
+                                        <input id="filter_date_to" type="text" name="to" class="form-control date_to" placeholder="{{ __('Select date') }}" value="{{ request()->get('to') ?? now() }}" data-toggle="flatpickr" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">
+                                    </div>
+                                </div>
+
+                                <div class="ml-auto">
+                                    <button class="btn btn-primary border-left border-top border-top-sm-0 rounded-top-0 rounded-top-sm rounded-left-sm-0" type="submit" style="margin-top: 27px">
+                                        {{ __('Export Data') }} <i class="material-icons">file_download</i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header card-header-large bg-white d-flex align-items-center">
+                    <h4 class="card-header__title flex m-0">{{ __('Recent Orders') }}</h4>
+                </div>
 
                 <div class="table-responsive" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
 
                     <table class="table mb-0 thead-border-top-0 table-striped">
                         <thead>
-                        <tr>
+                            <tr>
+                                <th style="width: 5%;" class="text-center">#</th>
 
-                            <th style="width: 30px;" class="text-center">#ID</th>
-                            <th>Company Name</th>
-                            <th style="width: 120px;" class="text-center">Created</th>
-                            <th class="text-center">Members</th>
-                            <th class="text-center">Growth</th>
-                            <th style="width: 50px;">#INV</th>
-                            <th style="width: 120px;" class="text-right">Total Sales</th>
-                            <th style="width: 50px;">
-                                <div class="dropdown pull-right">
-                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Bulk</a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="javascript:void(0)" class="dropdown-item"><i class="material-icons  mr-1">work</i> Update Status</a>
-                                        <a href="javascript:void(0)" class="dropdown-item"><i class="material-icons  mr-1">pin_drop</i> Add Location</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item"><i class="material-icons  mr-1">archive</i> Archive</a>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
+                                <th style="width: 20%;">{{ __('Username') }}</th>
+
+                                <th style="width: 20%;">
+                                    {{ __('Type') }}
+                                </th>
+
+                                <th style="width: 15%;">{{ __('Status') }}</th>
+
+                                <th style="width: 20%;">{{ __('Reason in rejection') }}</th>
+
+                                <th style="width: 20%;" class="text-right">
+                                    <i class="material-icons icon-16pt text-muted-light mr-1">today</i>
+                                    {{ __('Created at') }}
+                                </th>
+                            </tr>
                         </thead>
                         <tbody class="list" id="companies">
-                        <tr>
-                            <td>
-                                <div class="badge badge-soft-dark">#29178</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
+                        @php
+                            $status = [
+                                '1'     => ['name'  => __('On hold'), 'btn' => 'warning'],
+                                '2'     => ['name'  => __('Under Processing'), 'btn' => 'info'],
+                                '3'     => ['name'  => __('Approved'), 'btn' => 'success'],
+                                '4'     => ['name'  => __('Rejected'), 'btn' => 'danger'],
+                                '5'     => ['name'  => __('Delayed'), 'btn' => 'secondary']
+                            ];
+                        @endphp
 
+                        @forelse($orders as $index => $order)
+                            <tr>
+                                <td style="width: 5%;" class="text-center">
+                                    <div class="badge badge-soft-dark">
+                                        @if($order->type == 'ticket')
+                                            <a href="{{ route('tickets.edit', $order->id) }}">
+                                                <i class="material-icons icon-muted ml-3">arrow_forward</i>
+                                                {{ $index+1 }}
+                                            </a>
+                                        @elseif($order->type == 'supply')
+                                            <a href="{{ route('supplies.edit', $order->id) }}">
+                                                <i class="material-icons icon-muted ml-3">arrow_forward</i>
+                                                {{ $index+1 }}
+                                            </a>
+                                        @else
+                                            <a href="{{ route('requests.edit', $order->id) }}">
+                                                <i class="material-icons icon-muted ml-3">arrow_forward</i>
+                                                {{ $index+1 }}
+                                            </a>
+                                        @endif
 
-                                    <div class="d-flex align-items-center">
-                                        <i class="material-icons icon-16pt mr-1 text-blue">business</i>
-                                        <a href="#">Moon Ltd</a>
                                     </div>
+                                </td>
 
-                                    <div class="badge badge-warning ml-2">PRO</div>
+                                <td style="width: 20%;">
+                                    {{ $order->user->name }}
+                                </td>
 
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <small class="text-muted"><i class="material-icons icon-16pt mr-1">pin_drop</i> Miami, Florida, USA</small>
-                                </div>
-                            </td>
-                            <td style="width: 140px;"><i class="material-icons icon-16pt text-muted-light mr-1">today</i> 05-05-2019</td>
-                            <td style="width:80px" class="text-center">
+                                <td style="width: 20%;">
+                                        {{ __($order->type) }}
+                                </td>
 
-
-                                <i class="material-icons icon-16pt text-muted mr-1">account_circle</i> <a href="#">1</a>
-
-                            </td>
-                            <td class="text-center">3% <i class="material-icons icon-16pt text-success">arrow_upward</i></td>
-                            <td class="text-center">1</td>
-                            <td class="text-right"><strong>$32,124</strong></td>
-                            <td><a href="#" class="btn btn-sm btn-link"><i class="material-icons icon-16pt">arrow_forward</i></a> </td>
-                        </tr>
-
-
-                        <tr>
-
-                            <td>
-                                <div class="badge badge-soft-dark">#29179</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-
-
-                                    <div class="d-flex align-items-center">
-                                        <i class="material-icons icon-16pt mr-1 text-blue">business</i>
-                                        <a href="#">Blue Space Ltd</a>
+                                <td class="text-center" style="width: 15%;">
+                                    <div class="d-flex align-items-center btn btn-{{ $status[$order->status]['btn'] }}">
+                                        {{ $status[$order->status]['name'] }}
                                     </div>
-
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <small class="text-muted"><i class="material-icons icon-16pt mr-1">pin_drop</i> Miami, Florida, USA</small>
-                                </div>
-                            </td>
-                            <td style="width: 140px;"><i class="material-icons icon-16pt text-muted-light mr-1">today</i> 05-05-2019</td>
-                            <td style="width:80px" class="text-center">
-
-
-                                <i class="material-icons icon-16pt text-muted mr-1">account_circle</i> <a href="#">2</a>
-
-                            </td>
-                            <td class="text-center">5% <i class="material-icons icon-16pt text-success">arrow_upward</i></td>
-                            <td class="text-center">2</td>
-                            <td class="text-right"><strong>$13,593</strong></td>
-                            <td><a href="#" class="btn btn-sm btn-link"><i class="material-icons icon-16pt">arrow_forward</i></a> </td>
-                        </tr>
+                                </td>
+                                <td style="width: 20%;">
+                                    {{ $order->reason }}
+                                </td>
+                                <td class="text-right" style="width: 20%;">
+                                    <strong> {{ $order->created_at->diffForHumans() }}</strong>
+                                </td>
+                            </tr>
+                        @empty
+                        @endforelse
 
                         </tbody>
                     </table>
                 </div>
-
-                <div class="card-body text-right">
-                    15 <span class="text-muted">of 1,430</span> <a href="#" class="text-muted-light"><i class="material-icons ml-1">arrow_forward</i></a>
-                </div>
-
 
             </div>
 
