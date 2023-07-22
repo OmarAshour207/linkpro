@@ -20,7 +20,8 @@ class CompanyResource extends JsonResource
             'lng'           => $this->lng,
             'created_at'    => $this->created_at,
             'supervisor'    => new SupervisorResource($this->supervisor),
-            'floors'        => FloorResource::collection($this->floors)
+            'floors'        => FloorResource::collection($this->floors),
+            'supplies'      => SupplyResource::collection($this->supplies)
         ];
     }
 }

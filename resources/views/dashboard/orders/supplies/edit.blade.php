@@ -76,6 +76,18 @@
                                 </div>
                             </div>
 
+                            <div class="row no-gutters">
+                                <div class="col card-form__body card-body">
+                                    <div class="form-group col">
+                                        <label class="text-muted ml-1">
+                                            <i class="fa fa-clock"></i>
+                                        </label>
+                                        <label class="text-label" for="prepare_time">{{ __('Prepare Time in Minutes') }}</label>
+                                        <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $ticket->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
+                                    </div>
+                                </div>
+                            </div>
+
                             <label> {{ __('Supplies') }}</label>
                             <div class="form-group supplies">
                                 <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>

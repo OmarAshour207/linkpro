@@ -23,7 +23,8 @@ class Ticket extends Model
         'notes',
         'type',
         'status',
-        'reason'
+        'reason',
+        'prepare_time'
     ];
 
     // Relations

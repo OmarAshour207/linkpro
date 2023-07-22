@@ -94,4 +94,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'id');
     }
+
+    public function supplies()
+    {
+        return $this->hasMany(Supply::class, 'user_id');
+    }
 }

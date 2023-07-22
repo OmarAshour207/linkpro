@@ -32,6 +32,8 @@ Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {
 
     Route::resource('orders/supplies', \App\Http\Controllers\Dashboard\Order\SupplyController::class, ['as' => 'orders']);
 
+    Route::resource('contracts', \App\Http\Controllers\Dashboard\ContractController::class,)->except(['create', 'store', 'show']);
+
     Route::post('orders/supply/data', [\App\Http\Controllers\Dashboard\Order\SupplyController::class, 'supplies'])->name('orders.supply.data');
 
     Route::get('notifications/clear', [\App\Http\Controllers\Dashboard\NotificationController::class, 'clear'])->name('notifications.clear');

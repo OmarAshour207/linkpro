@@ -18,15 +18,14 @@ class UserController extends BaseController
             'email'     => 'sometimes|nullable|unique:users',
             'password'  => 'required|string|confirmed',
             'phonenumber'   => 'required|unique:users',
-            'role'          => 'required|string|in:company,user,supervisor',
+            'role'          => 'required|string|in:company,user,supervisor,admin',
             'address'       => 'sometimes|nullable|string',
             'lat'           => 'sometimes|nullable',
             'lng'           => 'sometimes|nullable'
         ]);
 
-        if($validator->fails()) {
+        if($validator->fails())
             return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
-        }
 
         $data = $validator->validated();
         $data['password'] = Hash::make($data['password']);

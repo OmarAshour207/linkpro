@@ -13,17 +13,16 @@ class CompanyController extends BaseController
 {
     public function getCompany()
     {
-        if(auth()->user()->role == 'company') {
-            $company = User::with('floors.paths.offices.contents', 'supervisor')
-                ->whereRole('company')
-                ->whereId(auth()->user()->id)
-                ->first();
+        if(auth()->user()->role != 'company')
+            return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
 
-            if($company)
-                return $this->sendResponse(new CompanyResource($company), __('Company'));
-        }
+        $company = User::with('floors.paths.offices.contents', 'supervisor', 'supplies')
+            ->whereRole('company')
+            ->whereId(auth()->user()->id)
+            ->first();
 
-        return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
+        if($company)
+            return $this->sendResponse(new CompanyResource($company), __('Company'));
     }
 
     public function getUser()

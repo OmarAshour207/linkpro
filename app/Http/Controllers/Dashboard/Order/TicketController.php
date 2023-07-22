@@ -105,6 +105,7 @@ class TicketController extends Controller
             'notes'         => 'sometimes|nullable|string',
             'status'        => 'required|numeric',
             'reason'        => Rule::requiredIf(fn() => ($request->status == 4)),
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3)),
             'tickets'       => 'required|array'
         ]);
 

@@ -33,6 +33,13 @@
                 </li>
 
                 <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="{{ route('contracts.index') }}">
+                        <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-comment-alt"></i>
+                        <span class="sidebar-menu-text"> {{ __('Contract Orders') }} </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboard_tickets">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left fa fa-globe"></i>
                         <span class="sidebar-menu-text"> {{ __('Orders') }} </span>

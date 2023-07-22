@@ -12,6 +12,7 @@ class SupplyResource extends JsonResource
             'id'        => $this->id,
             'name'      => $this->name,
             'quantity'  => $this->quantity,
+            'unit'      => $this->unit
         ];
     }
 }

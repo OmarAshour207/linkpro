@@ -17,6 +17,7 @@ class OrderRequestResource extends JsonResource
             'notes'     => $this->notes,
             'status'    => $this->status,
             'reason'    => $this->reason,
+            'prepare_time' => $this->prepare_time,
             'created_at'=> $this->created_at,
             'updated_at'=> $this->updated_at,
             'service'   => new ServiceResource($this->service),

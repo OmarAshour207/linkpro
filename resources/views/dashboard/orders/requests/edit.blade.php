@@ -114,6 +114,18 @@
                                 </div>
                             </div>
 
+                            <div class="row no-gutters">
+                                <div class="col card-form__body card-body">
+                                    <div class="form-group col">
+                                        <label class="text-muted ml-1">
+                                            <i class="fa fa-clock"></i>
+                                        </label>
+                                        <label class="text-label" for="prepare_time">{{ __('Prepare Time in Minutes') }}</label>
+                                        <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $request->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group col-lg-6">
                                 <label for="user"> {{ __('Users') }}</label> <br>
                                 <select id="user" name="user_id" data-toggle="select" class="form-control select2">

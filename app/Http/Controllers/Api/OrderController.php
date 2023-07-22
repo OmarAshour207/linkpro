@@ -13,6 +13,7 @@ use App\Models\TicketData;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class OrderController extends BaseController
 {
@@ -146,7 +147,15 @@ class OrderController extends BaseController
             if ($order->company->supervisor_id != auth()->user()->id)
                 return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
 
-        $order->update(['status' => $request->get('status')]);
+        $validator = Validator::make($request->all(), [
+            'status'        => 'required|numeric',
+            'prepare_time' => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3))
+        ]);
+
+        if ($validator->fails())
+            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+
+        $order->update($validator->validated());
 
         $result = [];
         if ($order->type == 'ticket')

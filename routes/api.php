@@ -8,6 +8,8 @@ Route::group([
 
     Route::get('services', [\App\Http\Controllers\Api\ServiceController::class, 'index']);
 
+    Route::post('contracts/register', [\App\Http\Controllers\Api\ContractController::class, 'register']);
+
     Route::controller(\App\Http\Controllers\Api\UserController::class)->group(function() {
         Route::post('register', 'register');
         Route::post('login', 'login');

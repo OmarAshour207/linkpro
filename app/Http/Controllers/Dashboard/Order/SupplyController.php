@@ -96,7 +96,8 @@ class SupplyController extends Controller
             'company_id'  => 'required|numeric',
             'supplies'    => 'required',
             'status'      => 'required|numeric',
-            'reason'      => Rule::requiredIf(fn() => ($request->status == 4))
+            'reason'      => Rule::requiredIf(fn() => ($request->status == 4)),
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3))
         ]);
         $supplies = $data['supplies'];
 

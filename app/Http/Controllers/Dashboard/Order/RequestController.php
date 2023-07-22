@@ -74,13 +74,13 @@ class RequestController extends Controller
             'end_time'      => 'required|date_format:H:i',
             'user_id'       => 'required|numeric',
             'status'        => 'required|numeric',
-            'reason'        => Rule::requiredIf(fn() => ($request->status == 4))
+            'reason'        => Rule::requiredIf(fn() => ($request->status == 4)),
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3))
         ]);
 
         $ticket->update($data);
         session()->flash('success', __('Saved successfully'));
         return redirect()->route('requests.index');
-
     }
 
     public function destroy($id)

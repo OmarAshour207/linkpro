@@ -201,5 +201,9 @@
     "Recent Orders": "أخر الطلبات",
     "Export Reports in Excel": "تصدير التقارير الي اكسل",
     "ID": "#",
-    "Service": "الخدمة"
+    "Service": "الخدمة",
+    "Contracts": "التعاقدات",
+    "Contract Orders": "طلبات التعاقد",
+    "Prepare Time": "وقت الأعداد",
+    "Prepare Time in Minutes": "وقت الاعداد بالدقائق"
 }
