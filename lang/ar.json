@@ -205,5 +205,6 @@
     "Contracts": "التعاقدات",
     "Contract Orders": "طلبات التعاقد",
     "Prepare Time": "وقت الأعداد",
-    "Prepare Time in Minutes": "وقت الاعداد بالدقائق"
+    "Prepare Time in Minutes": "وقت الاعداد بالدقائق",
+    "Order changed to delayed": "تم تغيير حالة الطلب الي متأخر"
 }
