@@ -320,7 +320,7 @@
                                                     <select id="floor_id_office" class="custom-select floors" name="floor_id[]" style="width: 300px;">
                                                         <option value="0" selected> {{ __('Floors') }} </option>
                                                         @forelse($floors as $floor)
-                                                            <option value="{{ $floor->id }}" {{ $floor->id == $path->floor_id ? 'selected' : '' }}> {{ $floor->title }} </option>
+                                                            <option value="{{ $floor->id }}" {{ $floor->id == $office->floor_id ? 'selected' : '' }}> {{ $floor->title }} </option>
                                                         @empty
                                                             <option> {{ __('No Floors') }} </option>
                                                         @endforelse
