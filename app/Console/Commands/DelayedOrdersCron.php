@@ -30,11 +30,12 @@ class DelayedOrdersCron extends Command
      */
     public function handle()
     {
-        $delayedOrders = Ticket::whereIn('status', [2, 3])->get();
+        $delayedOrders = Ticket::where('status', 2)->andWhereNotNull('prepare_time')->get();
 
         foreach ($delayedOrders as $order) {
-            if ($order->updated_at->addMinutes($order->prepare_time) <= Carbon::now()) {
+            if ($order->status_updated_at->addMinutes($order->prepare_time) <= Carbon::now()) {
                 $order->update(['status' => 5]);
+
                 Notification::create([
                     'user_id'   => $order->user_id,
                     'content'   => __('Order changed to delayed')

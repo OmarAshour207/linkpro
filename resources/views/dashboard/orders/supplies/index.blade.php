@@ -86,7 +86,7 @@
                                 $status = [
                                     '1'     => ['name'  => __('On hold'), 'btn' => 'warning'],
                                     '2'     => ['name'  => __('Under Processing'), 'btn' => 'info'],
-                                    '3'     => ['name'  => __('Approved'), 'btn' => 'success'],
+                                    '3'     => ['name'  => __('Delivered'), 'btn' => 'success'],
                                     '4'     => ['name'  => __('Rejected'), 'btn' => 'danger'],
                                     '5'     => ['name'  => __('Delayed'), 'btn' => 'secondary']
                                 ];

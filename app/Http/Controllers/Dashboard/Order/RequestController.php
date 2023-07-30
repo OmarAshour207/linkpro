@@ -14,6 +14,7 @@ use App\Models\Ticket;
 use App\Models\TicketData;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class RequestController extends Controller
@@ -75,8 +76,11 @@ class RequestController extends Controller
             'user_id'       => 'required|numeric',
             'status'        => 'required|numeric',
             'reason'        => Rule::requiredIf(fn() => ($request->status == 4)),
-            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3))
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 && $ticket->status != 2))
         ]);
+
+        if ($data['status'] == 2 && $ticket->status != 2)
+            $data['status_updated_at'] = Carbon::now();
 
         $ticket->update($data);
         session()->flash('success', __('Saved successfully'));

@@ -206,5 +206,15 @@
     "Contract Orders": "طلبات التعاقد",
     "Prepare Time": "وقت الأعداد",
     "Prepare Time in Minutes": "وقت الاعداد بالدقائق",
-    "Order changed to delayed": "تم تغيير حالة الطلب الي متأخر"
+    "Order changed to delayed": "تم تغيير حالة الطلب الي متأخر",
+    "Delivered": "تم التوصيل",
+    "Auth Error!": "خطأ في المصادقه",
+    "Validation Error.": "خطأ في البيانات",
+    "Contract Registered Successfully.": "تم تسجيل الطلب بنجاح",
+    "s_unauthorized": "غير مصرح",
+    "Data getting successfully": "تم استعاده البيانات بنجاح",
+    "Empty Order": "طلب فارغ",
+    "Validation Error": "خطأ في البيانات",
+    "User Registered Successfully.": "تم تسجيل المستخدم بنجاح",
+    "User Logged Successfully.": "تم تسجيل الدخول بنجاح"
 }

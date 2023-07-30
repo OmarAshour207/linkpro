@@ -56,7 +56,7 @@
                                 $status = [
                                     1     => __('On hold'),
                                     2     => __('Under Processing'),
-                                    3     => __('Approved'),
+                                    3     => __('Delivered'),
                                     4     => __('Rejected'),
                                     5     => __('Delayed')
                                 ];
@@ -83,7 +83,12 @@
                                             <i class="fa fa-clock"></i>
                                         </label>
                                         <label class="text-label" for="prepare_time">{{ __('Prepare Time in Minutes') }}</label>
-                                        <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $ticket->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
+                                        @if($ticket->prepare_time)
+                                            <input value="{{ $ticket->prepare_time }}" class="form-control" disabled>
+                                        @else
+                                            <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $ticket->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
+                                        @endif
+
                                     </div>
                                 </div>
                             </div>

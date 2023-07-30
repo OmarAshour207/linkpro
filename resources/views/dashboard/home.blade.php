@@ -35,11 +35,11 @@
             </div>
 
             @php
-                // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
+                // 1 => on hold, 2 => processing, 3 => Delivered, 4 => rejected, 5 => delayed
                 $status = [
                     1     => __('On hold'),
                     2     => __('Under Processing'),
-                    3     => __('Approved'),
+                    3     => __('Delivered'),
                     4     => __('Rejected'),
                     5     => __('Delayed')
                 ];
@@ -90,11 +90,11 @@
                                     </div>
                                 </div>
                                 @php
-                                    // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
+                                    // 1 => on hold, 2 => processing, 3 => Delivered, 4 => rejected, 5 => delayed
                                     $status = [
                                         1     => __('On hold'),
                                         2     => __('Under Processing'),
-                                        3     => __('Approved'),
+                                        3     => __('Delivered'),
                                         4     => __('Rejected'),
                                         5     => __('Delayed')
                                     ];
@@ -168,7 +168,7 @@
                             $status = [
                                 '1'     => ['name'  => __('On hold'), 'btn' => 'warning'],
                                 '2'     => ['name'  => __('Under Processing'), 'btn' => 'info'],
-                                '3'     => ['name'  => __('Approved'), 'btn' => 'success'],
+                                '3'     => ['name'  => __('Delivered'), 'btn' => 'success'],
                                 '4'     => ['name'  => __('Rejected'), 'btn' => 'danger'],
                                 '5'     => ['name'  => __('Delayed'), 'btn' => 'secondary']
                             ];

@@ -126,7 +126,7 @@ class OrderController extends BaseController
             });
 
         if (count($tickets) < 1)
-            return $this->sendError(__('Empty'), [__('Empty Order')], 401);
+            return $this->sendError(__('Empty Order'), [__('Empty Order')], 401);
 
         $result['tickets'] = isset($tickets['ticket']) ? OrderTicketResource::collection($tickets['ticket']) : [];
         $result['supplies'] = isset($tickets['supply']) ? OrderSupplyResource::collection($tickets['supply']) : [];

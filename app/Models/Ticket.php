@@ -24,7 +24,8 @@ class Ticket extends Model
         'type',
         'status',
         'reason',
-        'prepare_time'
+        'prepare_time',
+        'status_updated_at'
     ];
 
     // Relations

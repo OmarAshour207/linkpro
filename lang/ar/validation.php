@@ -207,7 +207,8 @@ return [
         'link'                  => ' ',
         'slug'                  => ' ',
         'phonenumber'           => 'رقم الهاتف',
-        'role'                  => 'الرتبه'
+        'role'                  => 'الرتبه',
+        'prepare_time'          => 'وقت الأعداد'
     ],
 
 ];

@@ -13,6 +13,8 @@ use App\Models\Ticket;
 use App\Models\TicketData;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
@@ -105,7 +107,7 @@ class TicketController extends Controller
             'notes'         => 'sometimes|nullable|string',
             'status'        => 'required|numeric',
             'reason'        => Rule::requiredIf(fn() => ($request->status == 4)),
-            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3)),
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 && $ticket->status != 2)),
             'tickets'       => 'required|array'
         ]);
 
@@ -124,6 +126,9 @@ class TicketController extends Controller
                 TicketData::whereId($ticketData['ticket_data_id'])->delete();
             }
         }
+
+        if ($data['status'] == 2 && $ticket->status != 2)
+            $data['status_updated_at'] = Carbon::now();
 
         $ticket->update($data);
         session()->flash('success', __('Saved successfully'));
