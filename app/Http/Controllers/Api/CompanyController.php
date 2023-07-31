@@ -13,21 +13,42 @@ class CompanyController extends BaseController
 {
     public function getCompany()
     {
-        if(auth()->user()->role != 'company')
-            return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
+        if(auth()->user()->role == 'company') {
+            $company = User::with('floors.paths.offices.contents', 'supervisor', 'supplies')
+                ->whereRole('company')
+                ->whereId(auth()->user()->id)
+                ->first();
 
-        $company = User::with('floors.paths.offices.contents', 'supervisor', 'supplies')
-            ->whereRole('company')
-            ->whereId(auth()->user()->id)
-            ->first();
+            if($company)
+                return $this->sendResponse(new CompanyResource($company), __('Company'));
+        } elseif (auth()->user()->role == 'supervisor') {
+            $companies = User::with('floors.paths.offices.contents', 'supervisor', 'supplies')
+                        ->where('supervisor_id', auth()->user()->id)
+                        ->get();
+            $result = CompanyResource::collection($companies);
 
-        if($company)
-            return $this->sendResponse(new CompanyResource($company), __('Company'));
+            return $this->sendResponse($result, __('Companies'));
+        } elseif (auth()->user()->role == 'admin') {
+            $companies = User::with('floors.paths.offices.contents', 'supervisor', 'supplies')
+                ->paginate(20);
+
+            $result = CompanyResource::collection($companies);
+
+            return $this->sendResponse($result, __('Companies'));
+        }
+
+        return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
     }
 
     public function getUser()
     {
-        if (auth()->user()->role == 'supervisor') {
+        if (auth()->user()->role == 'admin') {
+            $admin = User::whereRole('admin')
+                ->whereId(auth()->user()->id)
+                ->first();
+            if($admin)
+                return $this->sendResponse(new SampleUserResource($admin), __('Admin'));
+        } elseif (auth()->user()->role == 'supervisor') {
             $supervisor = User::with('company')
                 ->whereRole('supervisor')
                 ->whereId(auth()->user()->id)
