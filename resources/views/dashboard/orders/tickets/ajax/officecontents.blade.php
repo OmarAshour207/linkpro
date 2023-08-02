@@ -7,7 +7,7 @@
                         {{ __('Select') }}
                     </th>
                     <th>{{ __('Content') }}</th>
-                    <th> {{ __('Notes') }} </th>
+{{--                    <th> {{ __('Notes') }} </th>--}}
                 </tr>
             </thead>
         @endif
@@ -30,13 +30,13 @@
                     </div>
                 </td>
 
-                <td style="width: 400px;">
-                    <div class="media align-items-center">
-                        <div class="media-body">
-                            <input id="note" name="tickets[{{ $index }}][note]" type="text" class="form-control" placeholder="{{ __('Note') }}">
-                        </div>
-                    </div>
-                </td>
+{{--                <td style="width: 400px;">--}}
+{{--                    <div class="media align-items-center">--}}
+{{--                        <div class="media-body">--}}
+{{--                            <input id="note" name="tickets[{{ $index }}][note]" type="text" class="form-control" placeholder="{{ __('Note') }}">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </td>--}}
             </tr>
         @empty
             <div class="row no-gutters contents">

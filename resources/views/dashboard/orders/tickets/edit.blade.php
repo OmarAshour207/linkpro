@@ -27,164 +27,169 @@
                     <div class="tab-pane active show fade" id="ticket_tab">
                         <form method="post" action="{{ route('tickets.update', $ticket->id) }}">
 
-                                @csrf
-                                @method('put')
+                            @csrf
+                            @method('put')
 
-                                @include('dashboard.partials._errors')
+                            @include('dashboard.partials._errors')
 
+                            <div class="form-group col-lg-6">
+                                <label for="user"> {{ __('Companies') }}</label>
+                                <select id="user" name="company_id" data-toggle="select" class="form-control company_id select2" disabled>
+                                    <option value="" selected> {{ __('Companies') }} </option>
+                                    @forelse($companies as $company)
+                                        <option value="{{ $company->id }}" {{ old('company_id', $ticket->company->id) == $company->id ? 'selected' : '' }}> {{ $company->name . ' -- ' . $company->email }} </option>
+                                    @empty
+                                        <option value="" selected> {{ __('No Records') }} </option>
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="floor_id"> {{ __('Floors') }}</label> <br>
+                                <select id="floor_id" name="floor_id" data-toggle="select" class="form-control select2 floors" disabled>
+                                    @forelse($floors as $floor)
+                                        <option value="{{ $floor->id }}" {{ $floor->id == $ticket->floor_id ? 'selected' : '' }}> {{ $floor->title }} </option>
+                                    @empty
+                                        <option value="" selected> {{ __('Floor Title') }} </option>
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="row">
                                 <div class="form-group col-lg-6">
-                                    <label for="user"> {{ __('Companies') }}</label>
-                                    <select id="user" name="company_id" data-toggle="select" class="form-control company_id select2" disabled>
-                                        <option value="" selected> {{ __('Companies') }} </option>
-                                        @forelse($companies as $company)
-                                            <option value="{{ $company->id }}" {{ old('company_id', $ticket->company->id) == $company->id ? 'selected' : '' }}> {{ $company->name . ' -- ' . $company->email }} </option>
+                                    <label for="path_id"> {{ __('Paths') }}</label> <br>
+                                    <select id="path_id" name="path_id" data-toggle="select" class="form-control select2 paths" disabled>
+                                        @forelse($paths as $path)
+                                            <option value="{{ $path->id }}" {{ $path->id == $ticket->path_id ? 'selected' : '' }}> {{ $path->title }} </option>
                                         @empty
-                                            <option value="" selected> {{ __('No Records') }} </option>
+                                            <option value="" selected> {{ __('No Paths') }} </option>
                                         @endforelse
                                     </select>
                                 </div>
 
                                 <div class="form-group col-lg-6">
-                                    <label for="floor_id"> {{ __('Floors') }}</label> <br>
-                                    <select id="floor_id" name="floor_id" data-toggle="select" class="form-control select2 floors" disabled>
-                                        @forelse($floors as $floor)
-                                            <option value="{{ $floor->id }}" {{ $floor->id == $ticket->floor_id ? 'selected' : '' }}> {{ $floor->title }} </option>
+                                    <label for="office_id"> {{ __('Offices') }}</label> <br>
+                                    <select id="office_id" name="office_id" data-toggle="select" class="form-control select2 offices" disabled>
+                                        @forelse($offices as $office)
+                                            <option value="{{ $office->id }}" {{ $office->id == $ticket->office_id ? 'selected' : '' }}> {{ $office->title }} </option>
                                         @empty
-                                            <option value="" selected> {{ __('Floor Title') }} </option>
+                                            <option value="" selected> {{ __('No Offices') }} </option>
                                         @endforelse
                                     </select>
                                 </div>
+                            </div>
 
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
-                                        <label for="path_id"> {{ __('Paths') }}</label> <br>
-                                        <select id="path_id" name="path_id" data-toggle="select" class="form-control select2 paths" disabled>
-                                            @forelse($paths as $path)
-                                                <option value="{{ $path->id }}" {{ $path->id == $ticket->path_id ? 'selected' : '' }}> {{ $path->title }} </option>
-                                            @empty
-                                                <option value="" selected> {{ __('No Paths') }} </option>
-                                            @endforelse
-                                        </select>
-                                    </div>
+                            <div class="form-group col">
+                                <label for="notes"> {{ __("Notes") }}</label>
+                                <textarea id="notes" name="notes" class="form-control" placeholder="{{ __("Notes") }}">{{ old("notes", $ticket->notes) }}</textarea>
+                            </div>
 
-                                    <div class="form-group col-lg-6">
-                                        <label for="office_id"> {{ __('Offices') }}</label> <br>
-                                        <select id="office_id" name="office_id" data-toggle="select" class="form-control select2 offices" disabled>
-                                            @forelse($offices as $office)
-                                                <option value="{{ $office->id }}" {{ $office->id == $ticket->office_id ? 'selected' : '' }}> {{ $office->title }} </option>
-                                            @empty
-                                                <option value="" selected> {{ __('No Offices') }} </option>
-                                            @endforelse
-                                        </select>
+                            @php
+                                // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
+                                $status = [
+                                    1     => __('On hold'),
+                                    2     => __('Under Processing'),
+                                    3     => __('Delivered'),
+                                    4     => __('Rejected'),
+                                    5     => __('Delayed')
+                                ];
+                            @endphp
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label for="status"> {{ __('Status') }}</label> <br>
+                                    <select id="status" name="status" data-toggle="select" class="form-control select2 status">
+                                        @foreach($status as $key => $state)
+                                            <option value="{{ $key }}" {{ old('status', $ticket->status) == $key ? 'selected' : '' }}> {{ $state }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-6 reason" style="display: {{ old('status', $ticket->status) == 4 ? 'block' : 'none' }}">
+                                    <label for="reason"> {{ __("Reason") }}</label>
+                                    <input id="reason" name="reason" dir="auto" type="text" class="form-control" placeholder="{{ __("Reason") }}" value="{{ old("reason", $ticket->reason) }}">
+                                </div>
+                            </div>
+
+                            <div class="row no-gutters">
+                                <div class="col card-form__body card-body">
+                                    <div class="form-group col">
+                                        <label class="text-muted ml-1">
+                                            <i class="fa fa-clock"></i>
+                                        </label>
+                                        <label class="text-label" for="prepare_time">{{ __('Prepare Time in Minutes') }}</label>
+                                        @if($ticket->prepare_time)
+                                            <input value="{{ $ticket->prepare_time }}" class="form-control" disabled>
+                                        @else
+                                            <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $ticket->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
+                                        @endif
                                     </div>
                                 </div>
+                            </div>
 
-                                @php
-                                    // 1 => on hold, 2 => processing, 3 => approved, 4 => rejected, 5 => delayed
-                                    $status = [
-                                        1     => __('On hold'),
-                                        2     => __('Under Processing'),
-                                        3     => __('Delivered'),
-                                        4     => __('Rejected'),
-                                        5     => __('Delayed')
-                                    ];
-                                @endphp
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
-                                        <label for="status"> {{ __('Status') }}</label> <br>
-                                        <select id="status" name="status" data-toggle="select" class="form-control select2 status">
-                                            @foreach($status as $key => $state)
-                                                <option value="{{ $key }}" {{ old('status', $ticket->status) == $key ? 'selected' : '' }}> {{ $state }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-lg-6 reason" style="display: {{ old('status', $ticket->status) == 4 ? 'block' : 'none' }}">
-                                        <label for="reason"> {{ __("Reason") }}</label>
-                                        <input id="reason" name="reason" dir="auto" type="text" class="form-control" placeholder="{{ __("Reason") }}" value="{{ old("reason", $ticket->reason) }}">
-                                    </div>
-                                </div>
-
-                                <div class="row no-gutters">
-                                    <div class="col card-form__body card-body">
-                                        <div class="form-group col">
-                                            <label class="text-muted ml-1">
-                                                <i class="fa fa-clock"></i>
-                                            </label>
-                                            <label class="text-label" for="prepare_time">{{ __('Prepare Time in Minutes') }}</label>
-                                            @if($ticket->prepare_time)
-                                                <input value="{{ $ticket->prepare_time }}" class="form-control" disabled>
+                            <div class="contents">
+                                <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
+                                    <table class="table mb-0 thead-border-top-0">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 18px;">
+                                                {{ __('Select') }}
+                                            </th>
+                                            <th>{{ __('Content') }}</th>
+{{--                                                <th> {{ __('Notes') }} </th>--}}
+                                        </tr>
+                                        </thead>
+                                        <tbody class="list" id="staff">
+                                        @forelse($contents as $index => $content)
+                                            @if(key_exists($content->id, $contentsIds))
+                                                <input type="hidden" name="tickets[{{ $index }}][ticket_data_id]" value="{{ $contentsIds[$content->id]['ticket_data_id'] }}">
                                             @else
-                                                <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $ticket->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
+                                                <input type="hidden" name="tickets[{{ $index }}][ticket_data_id]" value="0">
                                             @endif
-                                        </div>
-                                    </div>
-                                </div>
+                                            <tr class="selected">
+                                                <input type="hidden" name="tickets[{{ $index }}][content_id]" value="{{ $content->id }}">
+                                                <td style="width: 18px;">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" name="tickets[{{ $index }}][box]" {{ key_exists($content->id, $contentsIds) ? 'checked' : '' }} class="form-check-input" id="selectbox{{ $index }}">
+                                                        <label class="form-check-label" for="selectbox{{ $index }}"><span class="text-hide">Check</span></label>
+                                                    </div>
+                                                </td>
 
-                                <div class="contents">
-                                    <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
-                                        <table class="table mb-0 thead-border-top-0">
-                                            <thead>
-                                            <tr>
-                                                <th style="width: 18px;">
-                                                    {{ __('Select') }}
-                                                </th>
-                                                <th>{{ __('Content') }}</th>
-                                                <th> {{ __('Notes') }} </th>
+                                                <td style="width: 300px;">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-body">
+                                                            <input id="content" name="content" type="text" class="form-control" placeholder="{{ __('Content') }}" value="{{ $content->content }}" disabled>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+{{--                                                    <td style="width: 400px;">--}}
+{{--                                                        <div class="media align-items-center">--}}
+{{--                                                            <div class="media-body">--}}
+{{--                                                                <input id="note" name="tickets[{{ $index }}][note]" value="{{ key_exists($content->id, $contentsIds) ? $contentsIds[$content->id]['note'] : '' }}" type="text" class="form-control" placeholder="{{ __('Note') }}">--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
                                             </tr>
-                                            </thead>
-                                            <tbody class="list" id="staff">
-                                            @forelse($contents as $index => $content)
-                                                @if(key_exists($content->id, $contentsIds))
-                                                    <input type="hidden" name="tickets[{{ $index }}][ticket_data_id]" value="{{ $contentsIds[$content->id]['ticket_data_id'] }}">
-                                                @else
-                                                    <input type="hidden" name="tickets[{{ $index }}][ticket_data_id]" value="0">
-                                                @endif
-                                                <tr class="selected">
-                                                    <input type="hidden" name="tickets[{{ $index }}][content_id]" value="{{ $content->id }}">
-                                                    <td style="width: 18px;">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" name="tickets[{{ $index }}][box]" {{ key_exists($content->id, $contentsIds) ? 'checked' : '' }} class="form-check-input" id="selectbox{{ $index }}">
-                                                            <label class="form-check-label" for="selectbox{{ $index }}"><span class="text-hide">Check</span></label>
-                                                        </div>
-                                                    </td>
-
-                                                    <td style="width: 300px;">
-                                                        <div class="media align-items-center">
-                                                            <div class="media-body">
-                                                                <input id="content" name="content" type="text" class="form-control" placeholder="{{ __('Content') }}" value="{{ $content->content }}" disabled>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-                                                    <td style="width: 400px;">
-                                                        <div class="media align-items-center">
-                                                            <div class="media-body">
-                                                                <input id="note" name="tickets[{{ $index }}][note]" value="{{ key_exists($content->id, $contentsIds) ? $contentsIds[$content->id]['note'] : '' }}" type="text" class="form-control" placeholder="{{ __('Note') }}">
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <div class="row no-gutters contents">
-                                                    <div class="col card-form__body card-body">
-                                                        <div class="row">
-                                                            <div class="form-group col">
-                                                                <label for="content">{{ __('Empty Contents') }}</label>
-                                                            </div>
+                                        @empty
+                                            <div class="row no-gutters contents">
+                                                <div class="col card-form__body card-body">
+                                                    <div class="row">
+                                                        <div class="form-group col">
+                                                            <label for="content">{{ __('Empty Contents') }}</label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-
+                                            </div>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
                                 </div>
 
-                                <div class="text-right mb-5">
-                                    <input type="submit" class="btn btn-success" value="{{ __('Update') }}">
-                                </div>
-                            </form>
+                            </div>
+
+                            <div class="text-right mb-5">
+                                <input type="submit" class="btn btn-success" value="{{ __('Update') }}">
+                            </div>
+                        </form>
                     </div>
                     <div class="tab-pane" id="comments_tab">
                         <div class="contents">

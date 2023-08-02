@@ -37,7 +37,7 @@
                             <th style="width: 15%;"> {{ __('Company') }} </th>
                             <th style="width: 10%;"> {{ __('Mobile Number') }} </th>
                             <th style="width: 10%;"> {{ __('Note') }} </th>
-                            <th style="width: 20%;"> {{ __('Office Content') }} -- {{ __('Note') }} </th>
+                            <th style="width: 20%;"> {{ __('Office Content') }} </th>
                             <th style="width: 10%;"> {{ __('Created at') }} </th>
                             <th style="width: 10%;"> {{ __('Status') }} </th>
                             <th style="width: 10%;"> {{ __('Action') }} </th>
@@ -87,7 +87,7 @@
                                         <ul>
                                         @forelse($ticket->ticketData as $data)
                                             <li>
-                                                {{ $data->content->content }} -- {{ $data->note }}
+                                                {{ $data->content->content }}
                                             </li>
                                         @empty
                                         @endforelse

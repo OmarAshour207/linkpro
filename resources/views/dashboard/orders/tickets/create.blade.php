@@ -59,6 +59,11 @@
                         </div>
                     </div>
 
+                    <div class="form-group col">
+                        <label for="notes"> {{ __("Notes") }}</label>
+                        <textarea id="notes" name="notes" class="form-control" placeholder="{{ __("Notes") }}">{{ old("notes") }}</textarea>
+                    </div>
+
                     <div class="contents">
 
                     </div>

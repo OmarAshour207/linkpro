@@ -97,7 +97,7 @@ class OrderController extends BaseController
                 'supply_id' => $supply['supply_id'],
                 'quantity'  => $supply['quantity'],
                 'unit'      => $supply['unit'],
-                'note'      => isset($supply['note']) ? $supply['note'] : null
+//                'note'      => isset($supply['note']) ? $supply['note'] : null
             ]);
         }
         $result = Ticket::with('ticketData')->find($ticket->id);

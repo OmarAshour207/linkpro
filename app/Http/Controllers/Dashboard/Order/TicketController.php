@@ -22,7 +22,7 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = Ticket::whereType('ticket')
-            ->with('ticketData', 'company', 'comments')
+            ->with('ticketData.content', 'company', 'comments')
             ->latest()
             ->paginate(20);
 
@@ -58,7 +58,7 @@ class TicketController extends Controller
                 TicketData::create([
                     'ticket_id'     => $ticket->id,
                     'content_id'    => $ticketData['content_id'],
-                    'note'          => $ticketData['note']
+//                    'note'          => $ticketData['note']
                 ]);
             }
         }
@@ -81,7 +81,7 @@ class TicketController extends Controller
             foreach ($contents as $content) {
                 if($content->id == $data->content_id) {
                     $contentsIds[$content->id] = [
-                        'note'              => $data->note,
+//                        'note'              => $data->note,
                         'ticket_data_id'    => $data->id
                     ];
                     break;
@@ -120,7 +120,7 @@ class TicketController extends Controller
                     [
                         'ticket_id'     => $ticket->id,
                         'content_id'    => $ticketData['content_id'],
-                        'note'          => $ticketData['note'],
+//                        'note'          => $ticketData['note'],
                     ]);
             } elseif (isset($ticketData['ticket_data_id']) && $ticketData['ticket_data_id'] != 0 && !isset($ticketData['box'])) {
                 TicketData::whereId($ticketData['ticket_data_id'])->delete();
