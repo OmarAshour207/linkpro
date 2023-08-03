@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/test/notifications', [App\Http\Controllers\Dashboard\NotificationController::class, 'test']);
+
 Auth::routes(['register' => false]);
 
 Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {

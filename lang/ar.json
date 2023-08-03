@@ -216,5 +216,15 @@
     "Empty Order": "طلب فارغ",
     "Validation Error": "خطأ في البيانات",
     "User Registered Successfully.": "تم تسجيل المستخدم بنجاح",
-    "User Logged Successfully.": "تم تسجيل الدخول بنجاح"
+    "User Logged Successfully.": "تم تسجيل الدخول بنجاح",
+    "Order status changed": "تم تغيير حالة الطلب",
+    "Notification sent": "تم أرسال الأشعار",
+    "New contract": "عقد عمل جديد",
+    "New contract registered": "تم تسجيل عقد عمل جديد",
+    "New ticket": "تذكره جديده",
+    "New ticket registered": "تم تسجيل تذكره جديده",
+    "New supply": "طلب مواد خام",
+    "New supply registered": "تم نسجيل طلب مواد خام جديد",
+    "New request": "طلب جديد",
+    "New request registered": "تم تسجيل طلب جديد"
 }

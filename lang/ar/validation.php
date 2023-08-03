@@ -208,7 +208,8 @@ return [
         'slug'                  => ' ',
         'phonenumber'           => 'رقم الهاتف',
         'role'                  => 'الرتبه',
-        'prepare_time'          => 'وقت الأعداد'
+        'prepare_time'          => 'وقت الأعداد',
+        "fcm_token"             => 'عنوان الجهاز'
     ],
 
 ];

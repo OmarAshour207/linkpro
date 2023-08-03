@@ -24,6 +24,7 @@ class User extends Authenticatable
         'lat',
         'lng',
         'supervisor_id',
+        'fcm_token'
     ];
 
     protected $hidden = [

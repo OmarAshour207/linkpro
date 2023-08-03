@@ -38,6 +38,16 @@ class UserController extends BaseController
 
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'phonenumber' => 'sometimes|nullable|numeric',
+            'email'     => 'sometimes|nullable',
+            'password'  => 'required|string',
+            'fcm_token' => 'required|string'
+        ]);
+
+        if($validator->fails())
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
+
         $credentials = [
             'password' => $request->get('password')
         ];
@@ -51,6 +61,9 @@ class UserController extends BaseController
 
         if(Auth::attempt($credentials)) {
             $user = Auth::user();
+
+            $user->update(['fcm_token'  => $validator->validated()['fcm_token']]);
+
             $success['token'] = $user->createToken('LinkPro')->plainTextToken;
 
             return $this->sendResponse($success, __('User Logged Successfully.'));

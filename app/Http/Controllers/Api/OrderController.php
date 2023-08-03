@@ -8,6 +8,7 @@ use App\Http\Resources\OrderRequestResource;
 use App\Http\Resources\OrderSupplyResource;
 use App\Http\Resources\OrderTicketResource;
 use App\Models\Comment;
+use App\Models\Notification;
 use App\Models\Ticket;
 use App\Models\TicketData;
 use App\Models\User;
@@ -47,6 +48,12 @@ class OrderController extends BaseController
         }
         $result = Ticket::whereId($ticket->id)->with('ticketData')->first();
 
+        $notifyData = [];
+        $notifyData['title'] = __('New ticket');
+        $notifyData['body'] = __('New ticket registered');
+        $notifyData['admin'] = true;
+        sendNotification($notifyData);
+
         return $this->sendResponse(new OrderTicketResource($result), __('Saved successfully'));
     }
 
@@ -68,6 +75,12 @@ class OrderController extends BaseController
         $data['user_id'] = auth()->user()->id;
 
         $result = Ticket::create($data);
+
+        $notifyData = [];
+        $notifyData['title'] = __('New request');
+        $notifyData['body'] = __('New request registered');
+        $notifyData['admin'] = true;
+        sendNotification($notifyData);
 
         return $this->sendResponse($result, __('Saved successfully'));
     }
@@ -102,10 +115,15 @@ class OrderController extends BaseController
         }
         $result = Ticket::with('ticketData')->find($ticket->id);
 
+        $notifyData = [];
+        $notifyData['title'] = __('New supply');
+        $notifyData['body'] = __('New supply registered');
+        $notifyData['admin'] = true;
+        sendNotification($notifyData);
+
         return $this->sendResponse($result, __('Saved successfully'));
     }
 
-    // TODO check for admin
     public function get()
     {
         $companyId = [];
@@ -114,19 +132,26 @@ class OrderController extends BaseController
             $companyId = [auth()->user()->id];
         elseif (auth()->user()->role == 'supervisor') {
             $companyId = User::where('supervisor_id', auth()->user()->id)->pluck('id');
+        } elseif (auth()->user()->role == 'admin') {
+            $companyId = User::whereRole('company')->pluck('id');
         }
 
+        // check here
         $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'ticketData', 'service'])
             ->whereIn('type', ['ticket', 'supply', 'request'])
-            ->whereIn('company_id', $companyId)
-            ->orWhere('user_id', auth()->user()->id)
-            ->get()
+            ->when(count($companyId) && auth()->user()->role != 'admin', function ($query) use ($companyId) {
+                return $query->whereIn('company_id', $companyId);
+            })
+            ->when(auth()->user()->role != 'admin', function ($query) {
+                return $query->orWhere('user_id', auth()->user()->id);
+            })
+            ->paginate(60)
             ->groupBy(function ($data) {
                 return $data->type;
             });
 
         if (count($tickets) < 1)
-            return $this->sendError(__('Empty Order'), [__('Empty Order')], 401);
+            return $this->sendResponse([], __('Empty Order'));
 
         $result['tickets'] = isset($tickets['ticket']) ? OrderTicketResource::collection($tickets['ticket']) : [];
         $result['supplies'] = isset($tickets['supply']) ? OrderSupplyResource::collection($tickets['supply']) : [];
@@ -135,21 +160,21 @@ class OrderController extends BaseController
         return $this->sendResponse($result, __('Data getting successfully'));
     }
 
-    // TODO check for admin
     public function changeStatus($id, Request $request)
     {
-        if (auth()->user()->role != 'supervisor')
+        if (auth()->user()->role != 'supervisor' || auth()->user()->role != 'admin')
             return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
 
-        $order = Ticket::whereId($id)->first();
+        $order = Ticket::with('user')->whereId($id)->first();
 
-        if ($order->type == 'ticket' || $order->type == 'supply')
-            if ($order->company->supervisor_id != auth()->user()->id)
-                return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+        if(auth()->user()->role != 'admin')
+            if ($order->type == 'ticket' || $order->type == 'supply')
+                if ($order->company->supervisor_id != auth()->user()->id)
+                    return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
 
         $validator = Validator::make($request->all(), [
             'status'        => 'required|numeric',
-            'prepare_time' => Rule::requiredIf(fn() => ($request->status == 2 || $request->status == 3))
+            'prepare_time' => Rule::requiredIf(fn() => ($request->status == 3))
         ]);
 
         if ($validator->fails())
@@ -162,6 +187,28 @@ class OrderController extends BaseController
             $result = new OrderTicketResource($order);
         if ($order->type == 'supply')
             $result = new OrderSupplyResource($order);
+
+        $statusName = [
+            '1'     => __('On hold'),
+            '2'     => __('Under Processing'),
+            '3'     => __('Delivered'),
+            '4'     => __('Rejected'),
+            '5'     => __('Delayed')
+        ];
+
+        $notifyData = [];
+        $notifyData['title'] = __('Order status changed');
+        $notifyData['body'] = __('Order status changed') . " " . __('To') . " " . $statusName[$order->status];
+
+        Notification::create([
+            'user_id'   => $order->user_id,
+            'title'     => $notifyData['title'],
+            'content'   => $notifyData['body']
+        ]);
+
+        $notifyData['admin'] = true;
+        $notifyData['tokens'] = $order->user->fcm_token;
+        sendNotification($notifyData);
 
         return $this->sendResponse($result, __('Saved successfully'));
     }

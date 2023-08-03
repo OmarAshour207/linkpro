@@ -27,6 +27,13 @@ class ContractController extends BaseController
 
         $user = User::create($data);
 
+        // for notification
+        $notifyData = [];
+        $notifyData['title'] = __('New contract');
+        $notifyData['body'] = __('New contract registered');
+        $notifyData['admin'] = true;
+        sendNotification($notifyData);
+
         return $this->sendResponse(new SampleUserResource($user), __('Contract Registered Successfully.'));
     }
 }
