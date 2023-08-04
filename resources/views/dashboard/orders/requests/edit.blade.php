@@ -133,12 +133,21 @@
                             <div class="form-group col-lg-6">
                                 <label for="user"> {{ __('Users') }}</label> <br>
                                 <select id="user" name="user_id" data-toggle="select" class="form-control select2">
-                                    <option value="" selected> {{ __('Users') }} </option>
-                                    @forelse($users as $user)
-                                        <option value="{{ $user->id }}" {{ old('user_id', $request->user_id) == $user->id ? 'selected' : '' }}> {{ $user->name . ' -- ' . $user->email }} </option>
-                                    @empty
-                                        <option value="" selected> {{ __('No Records') }} </option>
-                                    @endforelse
+                                    <optgroup label="{{ __('Users') }}">
+                                        @forelse($users as $user)
+                                            <option value="{{ $user->id }}" {{ old('user_id', $request->user_id) == $user->id ? 'selected' : '' }}> {{ $user->name . ' -- ' . $user->email }} </option>
+                                        @empty
+                                            <option value="" selected> {{ __('No Records') }} </option>
+                                        @endforelse
+                                    </optgroup>
+
+                                    <optgroup label="{{ __('Companies') }}">
+                                        @forelse($companies as $company)
+                                            <option value="{{ $company->id }}" {{ old('user_id', $request->user_id) == $company->id ? 'selected' : '' }}> {{ $company->name . ' -- ' . $company->email }} </option>
+                                        @empty
+                                            <option value="" selected> {{ __('No Records') }} </option>
+                                        @endforelse
+                                    </optgroup>
                                 </select>
                             </div>
 

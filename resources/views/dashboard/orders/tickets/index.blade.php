@@ -76,7 +76,7 @@
                             <td style="width: 10%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{ $ticket->notes }}
+                                        {{ mb_substr($ticket->notes, 0, 50) }}
                                     </div>
                                 </div>
                             </td>

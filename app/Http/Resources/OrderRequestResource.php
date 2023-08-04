@@ -20,6 +20,7 @@ class OrderRequestResource extends JsonResource
             'prepare_time' => $this->prepare_time,
             'created_at'=> $this->created_at,
             'updated_at'=> $this->updated_at,
+            'user'      => new SampleUserResource($this->user),
             'service'   => new ServiceResource($this->service),
             'comments'  => CommentResource::collection($this->comments)
         ];

@@ -16,8 +16,7 @@ class UserController extends Controller
     {
         $users = User::whenSearch(\request()->search)
             ->whenRole(\request()->role)
-            ->where('role', '!=', 'admin')
-            ->where('role', '!=', 'company')
+            ->whereNotIn('role',['company', 'contract'])
             ->orderBy('id')
             ->paginate(20);
         return view('dashboard.users.index', compact('users'));

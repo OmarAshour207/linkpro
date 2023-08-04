@@ -15,6 +15,7 @@ use App\Models\TicketData;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class RequestController extends Controller
@@ -32,9 +33,10 @@ class RequestController extends Controller
     public function create()
     {
         $users = User::whereRole('user')->get();
+        $companies = User::whereRole('company')->get();
         $services = Service::all();
 
-        return view('dashboard.orders.requests.create', compact('users', 'services'));
+        return view('dashboard.orders.requests.create', compact('users', 'services', 'companies'));
     }
 
     public function store(Request $request)
@@ -57,10 +59,16 @@ class RequestController extends Controller
     public function edit($id)
     {
         $request = Ticket::findOrFail($id);
+
         $users = User::whereRole('user')->get();
+        $companies = User::whereRole('company')->get();
         $services = Service::all();
-        $comments = Comment::with('user')->where('ticket_id', $id)->orderBy('id', 'desc')->get();
-        return view('dashboard.orders.requests.edit', compact('users', 'request', 'services', 'comments'));
+        $comments = Comment::with('user')
+            ->where('ticket_id', $id)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('dashboard.orders.requests.edit', compact('users', 'request', 'services', 'comments', 'companies'));
  }
 
     public function update($id, Request $request)

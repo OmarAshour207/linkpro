@@ -72,13 +72,17 @@
                             </td>
 
                             @php
-
+                            $userStatus = [
+                                'user'          => 'info',
+                                'supervisor'    => 'warning',
+                                'admin'         => 'success'
+                            ];
                             @endphp
                             <td style="width: 20%;">
-                                <a href="{{ route('users.index', ['role' => 'supervisor']) }}">
-                                    <div class="d-flex align-items-center  btn btn-{{ $user->role == 'supervisor' ? 'success' : 'info' }}">
+                                <a href="{{ route('users.index', ['role' => $user->role]) }}">
+                                    <div class="d-flex align-items-center  btn btn-{{ $userStatus[$user->role] }}">
                                         <div class="d-flex align-items-center">
-                                            {{ $user->role == 'supervisor' ? __('Supervisor') : __('User') }}
+                                            {{ __($user->role) }}
                                         </div>
                                     </div>
                                 </a>

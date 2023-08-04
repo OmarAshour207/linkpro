@@ -35,7 +35,7 @@
             <td>
                 <ul>
                     @forelse($ticket->ticketData as $data)
-                        <li>{{ $data->content->content }} {{ $data->content->note }}</li>
+                        <li>{{ $data->content->content }}</li>
                     @empty
                     @endforelse
                  </ul>

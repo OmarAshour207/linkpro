@@ -226,5 +226,8 @@
     "New supply": "طلب مواد خام",
     "New supply registered": "تم نسجيل طلب مواد خام جديد",
     "New request": "طلب جديد",
-    "New request registered": "تم تسجيل طلب جديد"
+    "New request registered": "تم تسجيل طلب جديد",
+    "user": "مستخدم",
+    "supervisor": "مشرف",
+    "admin": "مدير"
 }

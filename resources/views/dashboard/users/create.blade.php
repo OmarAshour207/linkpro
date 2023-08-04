@@ -124,6 +124,7 @@
                             <option value="" selected> {{ __('Role') }} </option>
                             <option value="supervisor" {{ old('role') == 'supervisor' ? 'selected' : '' }}> {{ __('Supervisor') }} </option>
                             <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}> {{ __('User') }} </option>
+                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}> {{ __('admin') }} </option>
                         </select>
                     </div>
 

@@ -137,7 +137,7 @@ class OrderController extends BaseController
         }
 
         // check here
-        $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'ticketData', 'service'])
+        $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'ticketData', 'service', 'user'])
             ->whereIn('type', ['ticket', 'supply', 'request'])
             ->when(count($companyId) && auth()->user()->role != 'admin', function ($query) use ($companyId) {
                 return $query->whereIn('company_id', $companyId);
