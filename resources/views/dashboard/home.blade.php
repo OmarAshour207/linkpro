@@ -184,7 +184,7 @@
                                                 {{ $index+1 }}
                                             </a>
                                         @elseif($order->type == 'supply')
-                                            <a href="{{ route('supplies.edit', $order->id) }}">
+                                            <a href="{{ route('orders.supplies.edit', $order->id) }}">
                                                 <i class="material-icons icon-muted ml-3">arrow_forward</i>
                                                 {{ $index+1 }}
                                             </a>
