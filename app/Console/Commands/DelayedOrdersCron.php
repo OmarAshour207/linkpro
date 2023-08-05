@@ -50,7 +50,7 @@ class DelayedOrdersCron extends Command
                 ]);
 
                 $notifyData['admin'] = true;
-                $notifyData['tokens'] = $order->user->fcm_token;
+                $notifyData['tokens'] = [$order->user->fcm_token];
                 sendNotification($notifyData);
             }
         }

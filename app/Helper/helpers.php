@@ -10,7 +10,7 @@ function sendNotification($data)
 
     if(isset($data['admin'])) {
         $adminTokens = \App\Models\User::whereRole('admin')->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
-        $tokens = array_merge($adminTokens,$tokens);
+        $tokens = array_merge($adminTokens, $tokens);
     }
 
     $FIREBASE_API_KEY = env('FIREBASE_API_KEY');

@@ -207,7 +207,7 @@ class OrderController extends BaseController
         ]);
 
         $notifyData['admin'] = true;
-        $notifyData['tokens'] = $order->user->fcm_token;
+        $notifyData['tokens'] = [$order->user->fcm_token];
         sendNotification($notifyData);
 
         return $this->sendResponse($result, __('Saved successfully'));
