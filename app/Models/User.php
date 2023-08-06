@@ -40,16 +40,16 @@ class User extends Authenticatable
     public function getUserImageAttribute()
     {
         if ($this->image)
-            return url('/uploads/users/' . $this->image);
-        return url('/uploads/users/avatar.png');
+            return url('uploads/users/' . $this->image);
+        return url('uploads/users/avatar.png');
 //        return Storage::url('users/' . $this->image);
     }
 
     public function getThumbImageAttribute()
     {
         if ($this->image)
-            return url('/uploads/users/thumb_' . $this->image);
-        return url('/uploads/users/thumb_avatar.png');
+            return url('uploads/users/thumb_' . $this->image);
+        return url('uploads/users/thumb_avatar.png');
 //        return Storage::url('users/thumb_' . $this->image);
     }
 

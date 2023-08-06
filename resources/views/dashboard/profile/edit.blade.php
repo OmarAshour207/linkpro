@@ -44,7 +44,7 @@
                     @else
                         var mock = { name: '{{ $user->name }}', size: 2};
                         this.emit('addedfile', mock);
-                        this.emit('thumbnail', mock, '{{ $user->thumbUserImage }}');
+                        this.emit('thumbnail', mock, '{{ $user->thumbImage }}');
                         this.emit('complete', mock);
                     @endif
                     $('.dz-progress').remove();
@@ -111,20 +111,20 @@
                                 <input id="address" type="text" name="address" class="form-control" placeholder="{{ __('Address') }}" value="{{ old('address', $user->address) }}">
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="lat">{{ __('Lat') }}</label>
-                                        <input id="lat" type="text" name="lat" class="form-control" placeholder="{{ __('Lat') }}" value="{{ old('lat', $user->lat) }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="lng">{{ __('Lng') }}</label>
-                                        <input id="lng" type="text" name="lng" class="form-control" placeholder="{{ __('Lng') }}" value="{{ old('lng', $user->lng) }}">
-                                    </div>
-                                </div>
-                            </div>
+{{--                            <div class="row">--}}
+{{--                                <div class="col-lg-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="lat">{{ __('Lat') }}</label>--}}
+{{--                                        <input id="lat" type="text" name="lat" class="form-control" placeholder="{{ __('Lat') }}" value="{{ old('lat', $user->lat) }}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-lg-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="lng">{{ __('Lng') }}</label>--}}
+{{--                                        <input id="lng" type="text" name="lng" class="form-control" placeholder="{{ __('Lng') }}" value="{{ old('lng', $user->lng) }}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <div class="form-group">
                                 <label for="phonenumber">{{ __('Phone Number') }}</label>
@@ -161,7 +161,7 @@
                             <p><strong class="headings-color">{{ __('Profile Image') }}</strong></p>
                         </div>
                         <div class="form-group">
-                            <input class="image_name" type="hidden" name="image" value="{{ $user->image }}">
+                            <input class="image_name" type="hidden" name="image">
                         </div>
                         <div class="form-group">
                             <label> {{ __('Photo') }} </label>

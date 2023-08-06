@@ -23,10 +23,9 @@ class ProfileController extends Controller
             'name'          => 'required|string',
             'old_password'  => 'sometimes|nullable',
             'new_password'  => 'sometimes|nullable|min:6|required_with:confirm_new_password|same:confirm_new_password',
-            'lat'           => 'sometimes|nullable|string',
-            'lng'           => 'sometimes|nullable|string',
             'address'       => 'sometimes|nullable|string',
-            'phonenumber'   => 'sometimes|nullable|numeric|unique:users:phonenumber'
+            'phonenumber'   => 'sometimes|nullable|numeric|unique:users,phonenumber,' . auth()->user()->id,
+            'image'         => 'sometimes|nullable'
         ]);
 
         $user = auth()->user();
@@ -37,8 +36,8 @@ class ProfileController extends Controller
 
         if ($request->image && $request->image != 'avatar.png') {
             $image = Media::where('id', $request->image)->first();
-            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
-            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
+            File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
+            File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
             $data['image'] = $image->name;
             $image->delete();
         } else {
