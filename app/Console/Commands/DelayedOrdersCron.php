@@ -54,7 +54,7 @@ class DelayedOrdersCron extends Command
                 sendNotification($notifyData);
             }
         }
-        \Log::info('Cron worked Fine');
+//        \Log::info('Cron worked Fine');
 
         return Command::SUCCESS;
     }
