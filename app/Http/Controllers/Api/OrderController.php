@@ -46,7 +46,7 @@ class OrderController extends BaseController
                 ]);
             }
         }
-        $result = Ticket::whereId($ticket->id)->with('ticketData')->first();
+        $result = Ticket::with('ticketData')->find($ticket->id);
 
         $notifyData = [];
         $notifyData['title'] = __('New ticket');
@@ -54,7 +54,7 @@ class OrderController extends BaseController
         $notifyData['admin'] = true;
         sendNotification($notifyData);
 
-        return $this->sendResponse(new OrderTicketResource($result), __('Saved successfully'));
+        return $this->sendResponse($result, __('Saved successfully'));
     }
 
     public function storeRequest(Request $request)
