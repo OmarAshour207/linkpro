@@ -176,7 +176,21 @@ class OrderController extends BaseController
 
     public function changeStatus(Request $request)
     {
-        $id = $request->request->get('order_id');
+        $validator = Validator::make($request->all(), [
+            'order_id'      => 'required|numeric',
+            'status'        => 'required|numeric',
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2)),
+            'reason'        => Rule::requiredIf(fn() => ($request->status == 4))
+        ]);
+
+        if ($validator->fails())
+            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+
+        $id = $validator->validated()['order_id'];
+
+        if(!$id)
+            return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
+
         $order = Ticket::with('user')->find($id);
 
         if(!$order)
@@ -194,19 +208,9 @@ class OrderController extends BaseController
         }
 
         if ($role == 'company') {
-            if ($order->company->id != auth()->user()->id) {
+            if ($order->company->id != auth()->user()->id || $validator->validated()['status'] != 3)
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
-            }
         }
-
-        $validator = Validator::make($request->all(), [
-            'status'        => 'required|numeric',
-            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2)),
-            'reason'        => Rule::requiredIf(fn() => ($request->status == 4))
-        ]);
-
-        if ($validator->fails())
-            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
 
         $order->update($validator->validated());
 
