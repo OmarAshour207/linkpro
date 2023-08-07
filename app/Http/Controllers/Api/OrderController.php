@@ -54,7 +54,7 @@ class OrderController extends BaseController
         $notifyData['admin'] = true;
         sendNotification($notifyData);
 
-        return $this->sendResponse($result, __('Saved successfully'));
+        return $this->sendResponse([], __('Saved successfully'));
     }
 
     public function storeRequest(Request $request)
