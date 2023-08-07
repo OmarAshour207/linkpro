@@ -27,7 +27,7 @@ class OrderController extends BaseController
             'floor_id'   => 'required|numeric',
             'path_id'    => 'required|numeric',
             'office_id'  => 'required|numeric',
-            'contents'   => 'required',
+            'contents'   => 'required|array',
             'notes'      => 'sometimes|nullable|string',
         ]);
 
