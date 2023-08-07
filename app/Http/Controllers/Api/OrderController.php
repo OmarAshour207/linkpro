@@ -15,11 +15,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends BaseController
 {
     public function storeTicket(Request $request)
     {
+        Log::info("start store ticket");
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|numeric',
             'floor_id'   => 'required|numeric',
@@ -30,13 +32,19 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError(__('Validation Error'), $validator->errors()->getMessages());
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages());
+
+        Log::info("Success in validation");
 
         $data = $validator->validated();
         $data['type'] = 'ticket';
         $data['user_id'] = auth()->user()->id;
 
+        Log::info("Finish add some data");
+
         $ticket = Ticket::create($data);
+
+        Log::info("Finish adding to db");
 
         if (isset($data['contents'])) {
             for ($i = 0;$i < count($data['contents']);$i++) {
@@ -46,7 +54,11 @@ class OrderController extends BaseController
                 ]);
             }
         }
+        Log::info("Finish adding tickets data db");
+
         $result = Ticket::with('ticketData')->find($ticket->id);
+
+        Log::info("Getting result to return it");
 
         $notifyData = [];
         $notifyData['title'] = __('New ticket');
@@ -54,7 +66,9 @@ class OrderController extends BaseController
         $notifyData['admin'] = true;
         sendNotification($notifyData);
 
-        return $this->sendResponse([], __('Saved successfully'));
+        Log::info("Finish Sending notifications and send response");
+
+        return $this->sendResponse($result, __('Saved successfully'));
     }
 
     public function storeRequest(Request $request)
@@ -163,21 +177,26 @@ class OrderController extends BaseController
     public function changeStatus(Request $request)
     {
         $id = $request->request->get('order_id');
-        $order = Ticket::with('user')->whereId($id)->first();
+        $order = Ticket::with('user')->find($id);
 
         if(!$order)
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
 
+        $types = ['supervisor', 'company', 'admin'];
+        $role = auth()->user()->role;
 
-        if(auth()->user()->role != 'admin') {
-            if(auth()->user()->role == 'supervisor') {
-                if ($order->company->supervisor_id != auth()->user()->id)
-                    return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
-            } elseif (auth()->user()->role == 'company') {
-                if ($order->company->id != auth()->user()->id)
-                    return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
-            } else
-                return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+        if(!in_array($role, $types))
+            return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
+
+        if($role == 'supervisor') {
+            if ($order->company->supervisor_id != auth()->user()->id)
+                return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
+        }
+
+        if ($role == 'company') {
+            if ($order->company->id != auth()->user()->id) {
+                return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
+            }
         }
 
         $validator = Validator::make($request->all(), [
