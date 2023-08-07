@@ -22,6 +22,7 @@ class OrderController extends BaseController
     public function storeTicket(Request $request)
     {
         Log::info("start store ticket");
+        Log::info(print_r($request->all(), true));
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|numeric',
             'floor_id'   => 'required|numeric',
@@ -32,7 +33,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages());
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
 
         Log::info("Success in validation");
 
@@ -82,7 +83,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
 
         $data = $validator->validated();
         $data['type'] = 'request';
@@ -176,6 +177,9 @@ class OrderController extends BaseController
 
     public function changeStatus(Request $request)
     {
+        Log::info("Start Status");
+        Log::info(print_r($request->all(), true));
+
         $validator = Validator::make($request->all(), [
             'order_id'      => 'required|numeric',
             'status'        => 'required|numeric',
@@ -184,14 +188,23 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+            return $this->sendError('Validation Error.', $validator->errors()->getMessages(), 400);
 
-        $id = $validator->validated()['order_id'];
+        Log::info("success validation");
+        Log::info(print_r($validator->validated(), true));
+
+        $data = $validator->validated();
+        $id = $data['order_id'];
+
+        Log::info("ID: " . $id);
 
         if(!$id)
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
 
-        $order = Ticket::with('user')->find($id);
+        $order = Ticket::with('user', 'company')->find($id);
+
+        Log::info("Order: ");
+        Log::info(print_r($order, true));
 
         if(!$order)
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
@@ -203,12 +216,18 @@ class OrderController extends BaseController
             return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
 
         if($role == 'supervisor') {
+            Log::info("Supervisor");
             if ($order->company->supervisor_id != auth()->user()->id)
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
         }
 
         if ($role == 'company') {
-            if ($order->company->id != auth()->user()->id || $validator->validated()['status'] != 3)
+            Log::info("User: " . auth()->user()->id);
+
+            $companyId = $order->type == 'request' ? $order->user->id : $order->company->id;
+            Log::info("Company: " . $companyId);
+
+            if ($companyId != auth()->user()->id || $data['status'] != 3)
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
         }
 
