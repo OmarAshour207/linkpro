@@ -29,7 +29,7 @@ Route::group([
 
         Route::get('user/orders', [\App\Http\Controllers\Api\OrderController::class, 'get']);
 
-        Route::post('order/{id}/status', [\App\Http\Controllers\Api\OrderController::class, 'changeStatus']);
+        Route::post('order/changestatus', [\App\Http\Controllers\Api\OrderController::class, 'changeStatus']);
 
         Route::post('comment/store', [\App\Http\Controllers\Api\OrderController::class, 'storeComment']);
 

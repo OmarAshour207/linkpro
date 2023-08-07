@@ -160,12 +160,17 @@ class OrderController extends BaseController
         return $this->sendResponse($result, __('Data getting successfully'));
     }
 
-    public function changeStatus($id, Request $request)
+    public function changeStatus(Request $request)
     {
+        $id = $request->request->get('order_id');
+
         if (auth()->user()->role != 'supervisor' || auth()->user()->role != 'admin')
             return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
 
         $order = Ticket::with('user')->whereId($id)->first();
+
+        if(!$order)
+            return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
 
         if(auth()->user()->role != 'admin')
             if ($order->type == 'ticket' || $order->type == 'supply')
@@ -174,7 +179,8 @@ class OrderController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'status'        => 'required|numeric',
-            'prepare_time' => Rule::requiredIf(fn() => ($request->status == 3))
+            'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2)),
+            'reason'        => Rule::requiredIf(fn() => ($request->status == 4))
         ]);
 
         if ($validator->fails())
@@ -187,6 +193,8 @@ class OrderController extends BaseController
             $result = new OrderTicketResource($order);
         if ($order->type == 'supply')
             $result = new OrderSupplyResource($order);
+        if ($order->type == 'request')
+            $result = new OrderRequestResource($order);
 
         $statusName = [
             '1'     => __('On hold'),

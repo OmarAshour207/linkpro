@@ -229,5 +229,6 @@
     "New request registered": "تم تسجيل طلب جديد",
     "user": "مستخدم",
     "supervisor": "مشرف",
-    "admin": "مدير"
+    "admin": "مدير",
+    "Not Found Order!": "طلب غير موجود!"
 }
