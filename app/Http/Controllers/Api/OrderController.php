@@ -163,19 +163,22 @@ class OrderController extends BaseController
     public function changeStatus(Request $request)
     {
         $id = $request->request->get('order_id');
-
-        if (auth()->user()->role != 'supervisor' || auth()->user()->role != 'admin')
-            return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
-
         $order = Ticket::with('user')->whereId($id)->first();
 
         if(!$order)
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
 
-        if(auth()->user()->role != 'admin')
-            if ($order->type == 'ticket' || $order->type == 'supply')
+
+        if(auth()->user()->role != 'admin') {
+            if(auth()->user()->role == 'supervisor') {
                 if ($order->company->supervisor_id != auth()->user()->id)
                     return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+            } elseif (auth()->user()->role == 'company') {
+                if ($order->company->id != auth()->user()->id)
+                    return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+            } else
+                return $this->sendError(__('Unauthorized'), [__('s_unauthorized')], 401);
+        }
 
         $validator = Validator::make($request->all(), [
             'status'        => 'required|numeric',

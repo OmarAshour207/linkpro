@@ -39,7 +39,7 @@
     "This password reset link will expire in :count minutes.": "ستنتهي صلاحية رابط استعادة كلمة المرور خلال :count دقيقة.",
     "Toggle navigation": "إظهار/إخفاء القائمة",
     "Too Many Requests": "طلبات كثيرة جداً",
-    "Unauthorized": "غير مصرح",
+    "Unauthorized": "غير مصرح بتنفيذ هذا القرار بالرجاء العوده الي المدير",
     "This action is unauthorized.": "هذا الإجراء غير مصرح به.",
     "Verify Email Address": "التحقق من عنوان البريد الإلكتروني",
     "Verify Your Email Address": "تحقق من عنوان البريد الإلكتروني الخاص بك",
