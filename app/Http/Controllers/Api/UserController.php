@@ -25,7 +25,7 @@ class UserController extends BaseController
         ]);
 
         if($validator->fails())
-            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         $data = $validator->validated();
         $data['password'] = Hash::make($data['password']);
@@ -46,7 +46,7 @@ class UserController extends BaseController
         ]);
 
         if($validator->fails())
-            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         $credentials = [
             'password' => $request->get('password')

@@ -30,7 +30,10 @@ class BaseController extends Controller
             $response['errors'] = $this->adaptErrorMessages($errorMessages);
         }
 
-        return response()->json($response, $code);
+        return response()->json($response, $code, [
+            'Content-Type'  => 'application/json',
+            'Accept'        => '*/*'
+        ]);
     }
 
     public function adaptErrorMessages($errors)

@@ -33,7 +33,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         Log::info("Success in validation");
 
@@ -84,7 +84,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 400);
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         $data = $validator->validated();
         $data['type'] = 'request';
@@ -112,7 +112,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         $data = $validator->validated();
         $data['type'] = 'supply';
@@ -191,7 +191,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError('Validation Error.', $validator->errors()->getMessages(), 400);
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         Log::info("success validation");
         Log::info(print_r($validator->validated(), true));
@@ -202,7 +202,7 @@ class OrderController extends BaseController
         Log::info("ID: " . $id);
 
         if(!$id)
-            return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
+            return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')]);
 
         $order = Ticket::with('user', 'company')->find($id);
 
@@ -210,7 +210,7 @@ class OrderController extends BaseController
         Log::info(print_r($order, true));
 
         if(!$order)
-            return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')], 401);
+            return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')]);
 
         $types = ['supervisor', 'company', 'admin'];
         $role = auth()->user()->role;
@@ -277,7 +277,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails())
-            return $this->sendError('Validation Error.', $validator->errors()->getMessages());
+            return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
         $data = $validator->validated();
         $data['user_id'] = auth()->user()->id;
