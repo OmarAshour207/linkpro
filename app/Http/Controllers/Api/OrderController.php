@@ -230,8 +230,13 @@ class OrderController extends BaseController
             $companyId = $order->company_id;
             Log::info("Company: " . $companyId);
 
-            if ($companyId != auth()->user()->id || $order->user_id != auth()->user()->id || $data['status'] != 3)
+            $userId = $order->user_id;
+            Log::info("User: " . $userId);
+
+            if (($companyId != auth()->user()->id && $order->user_id != auth()->user()->id) || $data['status'] != 3) {
+                Log::info("Unauthorized from users");
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
+            }
         }
 
         $order->update($validator->validated());
