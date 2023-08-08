@@ -42,54 +42,55 @@
                         <tbody class="list" id="companies">
                         @if($services->count() > 0)
                             @foreach($services as $index => $service)
-                        <tr>
-                            <td class="text-left">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input js-check-selected-row" id="customCheck1_20">
-                                    <label class="custom-control-label" for="customCheck1_20"><span class="text-hide">Check</span></label>
-                                </div>
-                            </td>
+                                <tr>
+                                    <td class="text-left">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input js-check-selected-row" id="customCheck1_20">
+                                            <label class="custom-control-label" for="customCheck1_20"><span class="text-hide">Check</span></label>
+                                        </div>
+                                    </td>
 
-                            <td style="width: 10%;">
-                                <div class="badge badge-soft-dark"> {{ $index+1 }} </div>
-                            </td>
+                                    <td style="width: 10%;">
+                                        <div class="badge badge-soft-dark"> {{ $index+1 }} </div>
+                                    </td>
 
-                            <td style="width: 30%;">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        {{ mb_substr($service->getTranslation('ar')->name, 0, 20) }}
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="width: 30%;">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        {{ substr($service->getTranslation('en')->name, 0, 20) }}
-                                    </div>
-                                </div>
-                            </td>
+                                    <td style="width: 30%;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                {{ mb_substr($service->getTranslation('ar')->name, 0, 20) }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                {{ substr($service->getTranslation('en')->name, 0, 20) }}
+                                            </div>
+                                        </div>
+                                    </td>
 
-                            <td>
-                                <a href="{{ route('services.edit', $service->id) }}" class="btn btn-sm btn-link">
-                                    <i class="fa fa-edit fa-2x"></i>
-                                </a>
-                                <form action="{{ route('services.destroy', $service->id) }}" method="post" style="display: inline-block">
-                                    @csrf
-                                    @method('delete')
+                                    <td>
+                                        <a href="{{ route('services.edit', $service->id) }}" class="btn btn-sm btn-link">
+                                            <i class="fa fa-edit fa-2x"></i>
+                                        </a>
+                                        <form action="{{ route('services.destroy', $service->id) }}" method="post" style="display: inline-block">
+                                            @csrf
+                                            @method('delete')
 
-                                    <button type="submit" class="btn btn-danger btn-sm delete"><i class="fa fa-trash"></i> </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                            {{ $services->appends(request()->query())->links() }}
+                                            <button type="submit" class="btn btn-danger btn-sm delete"><i class="fa fa-trash"></i> </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @else
                             <h1> {{ __('No records') }} </h1>
                         @endif
                         </tbody>
                     </table>
                 </div>
-
+            </div>
+            <div class="mt-4">
+                {{ $services->links('dashboard.pagination.custom') }}
             </div>
         </div>
         <!-- // END drawer-layout__content -->

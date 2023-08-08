@@ -25,7 +25,7 @@ class RequestController extends Controller
         $requests = Ticket::whereType('request')
             ->with('user', 'service')
             ->latest()
-            ->paginate(20);
+            ->paginate(2);
 
         return view('dashboard.orders.requests.index', compact('requests'));
     }
@@ -50,6 +50,7 @@ class RequestController extends Controller
             'user_id'       => 'required|numeric'
         ]);
         $data['type'] = 'request';
+        $data['company_id'] = $data['user_id'];
 
         Ticket::create($data);
         session()->flash('success', __('Saved successfully'));
@@ -86,6 +87,7 @@ class RequestController extends Controller
             'reason'        => Rule::requiredIf(fn() => ($request->status == 4)),
             'prepare_time'  => Rule::requiredIf(fn() => ($request->status == 2 && $ticket->status != 2))
         ]);
+        $data['company_id'] = $data['user_id'];
 
         if ($data['status'] == 2 && $ticket->status != 2)
             $data['status_updated_at'] = Carbon::now();

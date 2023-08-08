@@ -80,6 +80,7 @@ class OrderController extends BaseController
             'start_time' => 'required|date_format:H:i',
             'end_time'   => 'required|date_format:H:i',
             'notes'      => 'sometimes|nullable|string',
+            'company_id' => 'sometimes|nullable|numeric'
         ]);
 
         if ($validator->fails())
@@ -88,6 +89,8 @@ class OrderController extends BaseController
         $data = $validator->validated();
         $data['type'] = 'request';
         $data['user_id'] = auth()->user()->id;
+        if (!$data['company_id'])
+            $data['company_id'] = $data['user_id'];
 
         $result = Ticket::create($data);
 
@@ -224,7 +227,7 @@ class OrderController extends BaseController
         if ($role == 'company') {
             Log::info("User: " . auth()->user()->id);
 
-            $companyId = $order->type == 'request' ? $order->user->id : $order->company->id;
+            $companyId = $order->company_id;
             Log::info("Company: " . $companyId);
 
             if ($companyId != auth()->user()->id || $data['status'] != 3)

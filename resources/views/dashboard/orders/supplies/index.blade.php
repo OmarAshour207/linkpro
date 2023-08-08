@@ -114,12 +114,12 @@
                         @empty
                             <h1> {{ __('No records') }} </h1>
                         @endforelse
-                        {{ $tickets->appends(request()->query())->links() }}
-
                         </tbody>
                     </table>
                 </div>
-
+            </div>
+            <div class="mt-4">
+                {{ $tickets->links('dashboard.pagination.custom') }}
             </div>
         </div>
         <!-- // END drawer-layout__content -->

@@ -109,7 +109,7 @@
                                     '4'     => ['name'  => __('Rejected'), 'btn' => 'danger'],
                                     '5'     => ['name'  => __('Delayed'), 'btn' => 'secondary']
                                 ];
-                            @endphp
+//                            @endphp
                             <td style="width: 5%;">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center btn btn-{{ $status[$request->status]['btn'] }}">
@@ -133,12 +133,12 @@
                         @empty
                             <h1> {{ __('No records') }} </h1>
                         @endforelse
-                        {{ $requests->appends(request()->query())->links() }}
-
                         </tbody>
                     </table>
                 </div>
-
+            </div>
+            <div class="mt-4">
+                {{ $requests->links('dashboard.pagination.custom') }}
             </div>
         </div>
         <!-- // END drawer-layout__content -->
