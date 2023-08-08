@@ -230,7 +230,7 @@ class OrderController extends BaseController
             $companyId = $order->company_id;
             Log::info("Company: " . $companyId);
 
-            if ($companyId != auth()->user()->id || $data['status'] != 3)
+            if ($companyId != auth()->user()->id || $order->user_id != auth()->user()->id || $data['status'] != 3)
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
         }
 
@@ -257,13 +257,13 @@ class OrderController extends BaseController
         $notifyData['body'] = __('Order status changed') . " " . __('To') . " " . $statusName[$order->status];
 
         Notification::create([
-            'user_id'   => $order->user_id,
+            'user_id'   => auth()->user()->id,
             'title'     => $notifyData['title'],
             'content'   => $notifyData['body']
         ]);
 
         $notifyData['admin'] = true;
-        $notifyData['tokens'] = [$order->user->fcm_token];
+        $notifyData['tokens'] = [auth()->user()->fcm_token];
         sendNotification($notifyData);
 
         return $this->sendResponse($result, __('Saved successfully'));

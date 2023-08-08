@@ -10,15 +10,15 @@ class LocaleCheck
     public function handle(Request $request, Closure $next)
     {
         $locale = $request->get('locale');
-        if($locale == 'ar') {
-            session()->put('locale', 'ar');
+        if($locale == 'en') {
+            session()->put('locale', 'en');
         }
 
         if(session()->has('locale')) {
             app()->setLocale(session()->get('locale'));
         } else {
-            session()->put('locale', 'en');
-            app()->setLocale('en');
+            session()->put('locale', 'ar');
+            app()->setLocale('ar');
         }
         return $next($request);
     }

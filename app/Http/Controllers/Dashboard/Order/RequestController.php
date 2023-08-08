@@ -25,7 +25,7 @@ class RequestController extends Controller
         $requests = Ticket::whereType('request')
             ->with('user', 'service')
             ->latest()
-            ->paginate(2);
+            ->paginate(20);
 
         return view('dashboard.orders.requests.index', compact('requests'));
     }
