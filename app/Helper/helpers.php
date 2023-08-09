@@ -16,14 +16,16 @@ function sendNotification($data)
     $FIREBASE_API_KEY = env('FIREBASE_API_KEY');
     $url = 'https://fcm.googleapis.com/fcm/send';
 
+    $notification = [
+        'title' => $title,
+        'body'  => $body,
+        'sound' => 'default',
+        'badge' => 1
+    ];
+
     $data = [
         'registration_ids'  => $tokens,
-        'notification'  => [
-            'title' => $title,
-            'body'  => $body,
-            'sound' => 'sound',
-//                'badge' => '1'
-        ]
+        'notification'  => $notification
     ];
 
     $dataString = json_encode($data);
@@ -39,6 +41,10 @@ function sendNotification($data)
         curl_setopt ( $ch, CURLOPT_POST, true );
         curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $dataString );
 
         curl_exec ( $ch );

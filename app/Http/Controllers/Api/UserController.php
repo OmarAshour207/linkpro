@@ -69,6 +69,6 @@ class UserController extends BaseController
             return $this->sendResponse($success, __('User Logged Successfully.'));
         }
 
-        return $this->sendError(__('Auth Error!'), ['s_authError'], 401);
+        return $this->sendError(__('Auth Error!'), [__('Auth Error!')], 401);
     }
 }
