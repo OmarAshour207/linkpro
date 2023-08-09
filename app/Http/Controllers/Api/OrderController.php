@@ -90,7 +90,7 @@ class OrderController extends BaseController
         $data = $validator->validated();
         $data['type'] = 'request';
         $data['user_id'] = auth()->user()->id;
-        if (!$data['company_id'])
+        if (!isset($data['company_id']))
             $data['company_id'] = $data['user_id'];
 
         $result = Ticket::create($data);
