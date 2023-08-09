@@ -21,9 +21,6 @@ class OrderController extends BaseController
 {
     public function storeTicket(Request $request)
     {
-        Log::info("start store ticket");
-        Log::info(print_r($request->all(), true));
-
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|numeric',
             'floor_id'   => 'required|numeric',
@@ -36,17 +33,11 @@ class OrderController extends BaseController
         if ($validator->fails())
             return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
-        Log::info("Success in validation");
-
         $data = $validator->validated();
         $data['type'] = 'ticket';
         $data['user_id'] = auth()->user()->id;
 
-        Log::info("Finish add some data");
-
         $ticket = Ticket::create($data);
-
-        Log::info("Finish adding to db");
 
         if (isset($data['contents'])) {
             foreach ($data['contents'] as $content) {
@@ -59,19 +50,14 @@ class OrderController extends BaseController
 //
 //            }
         }
-        Log::info("Finish adding tickets data db");
 
         $result = Ticket::with('ticketData')->find($ticket->id);
 
-        Log::info("Getting result to return it");
-
         $notifyData = [];
         $notifyData['title'] = __('New ticket');
-        $notifyData['body'] = __('New ticket registered');
+        $notifyData['body'] = __('New ticket registered') . ' ' . __('From') . ' ' . auth()->user()->name;
         $notifyData['admin'] = true;
         sendNotification($notifyData);
-
-        Log::info("Finish Sending notifications and send response");
 
         return $this->sendResponse($result, __('Saved successfully'));
     }
@@ -93,6 +79,7 @@ class OrderController extends BaseController
         $data = $validator->validated();
         $data['type'] = 'request';
         $data['user_id'] = auth()->user()->id;
+
         if (!isset($data['company_id']))
             $data['company_id'] = $data['user_id'];
 
@@ -100,8 +87,9 @@ class OrderController extends BaseController
 
         $notifyData = [];
         $notifyData['title'] = __('New request');
-        $notifyData['body'] = __('New request registered');
+        $notifyData['body'] = __('New request registered') . ' ' . __('From') . ' ' . auth()->user()->name;
         $notifyData['admin'] = true;
+
         sendNotification($notifyData);
 
         return $this->sendResponse($result, __('Saved successfully'));
@@ -109,9 +97,6 @@ class OrderController extends BaseController
 
     public function storeSupply(Request $request)
     {
-        Log::info("start store ticket");
-        Log::info(print_r($request->all(), true));
-
         $validator = Validator::make($request->all(), [
             'company_id'    => 'required|numeric',
             'notes'         => 'sometimes|nullable|string',
@@ -142,7 +127,7 @@ class OrderController extends BaseController
 
         $notifyData = [];
         $notifyData['title'] = __('New supply');
-        $notifyData['body'] = __('New supply registered');
+        $notifyData['body'] = __('New supply registered') . ' ' . __('From') . ' ' . auth()->user()->name;
         $notifyData['admin'] = true;
         sendNotification($notifyData);
 
@@ -187,9 +172,6 @@ class OrderController extends BaseController
 
     public function changeStatus(Request $request)
     {
-        Log::info("Start Status");
-        Log::info(print_r($request->all(), true));
-
         $validator = Validator::make($request->all(), [
             'order_id'      => 'required|numeric',
             'status'        => 'required|numeric',
@@ -200,13 +182,8 @@ class OrderController extends BaseController
         if ($validator->fails())
             return $this->sendError(__('Validation Error.'), $validator->errors()->getMessages(), 422);
 
-        Log::info("success validation");
-        Log::info(print_r($validator->validated(), true));
-
         $data = $validator->validated();
         $id = $data['order_id'];
-
-        Log::info("ID: " . $id);
 
         if(!$id)
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')]);
@@ -223,24 +200,15 @@ class OrderController extends BaseController
             return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
 
         if($role == 'supervisor') {
-            Log::info("Supervisor");
             if ($order->company->supervisor_id != auth()->user()->id)
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
         }
 
         if ($role == 'company') {
-            Log::info("User: " . auth()->user()->id);
-
             $companyId = $order->company_id;
-            Log::info("Company: " . $companyId);
 
-            $userId = $order->user_id;
-            Log::info("User: " . $userId);
-
-            if (($companyId != auth()->user()->id && $order->user_id != auth()->user()->id) || $data['status'] != 3) {
-                Log::info("Unauthorized from users");
+            if (($companyId != auth()->user()->id && $order->user_id != auth()->user()->id) || $data['status'] != 3)
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
-            }
         }
 
         $order->update($validator->validated());
@@ -263,7 +231,7 @@ class OrderController extends BaseController
 
         $notifyData = [];
         $notifyData['title'] = __('Order status changed');
-        $notifyData['body'] = __('Order status changed') . " " . __('To') . " " . $statusName[$order->status];
+        $notifyData['body'] = auth()->user()->name . ' ' . __('changed Status for') . ' ' . $order->user->name . " " . __('To') . " " . $statusName[$order->status];
 
         Notification::create([
             'user_id'   => auth()->user()->id,

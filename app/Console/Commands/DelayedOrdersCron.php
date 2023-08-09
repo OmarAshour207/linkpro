@@ -36,12 +36,13 @@ class DelayedOrdersCron extends Command
 
         $notifyData = [];
         $notifyData['title'] = __('Order status changed');
-        $notifyData['body'] = __('Order status changed') . " " . __('To') . " " . __('Delayed');
 
         foreach ($delayedOrders as $order) {
             if (Carbon::parse($order->status_updated_at)->addMinutes($order->prepare_time) <= Carbon::now()) {
 
                 $order->update(['status' => 5]);
+
+                $notifyData['body'] = __('System') . ' ' . __('changed Status for') . ' ' . $order->user->name . " " . __('To') . " " . __('Delayed');
 
                 Notification::create([
                     'user_id'   => $order->user_id,

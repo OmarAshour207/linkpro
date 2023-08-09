@@ -230,5 +230,8 @@
     "user": "مستخدم",
     "supervisor": "مشرف",
     "admin": "مدير",
-    "Not Found Order!": "طلب غير موجود!"
+    "Not Found Order!": "طلب غير موجود!",
+    "Server Error": "خطأ غير متوقع الرجاء التواصل مع المدير!",
+    "changed Status for": "غير حالة",
+    "System": "النظام"
 }

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,9 +44,22 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $ex){
 
         if( $request->is('api/*') ) {
-            return response()->json(['success' => false, 'errors' => ['s_unauthenticated'], 'message' => __('Unauthenticated')], 401);
+            return response()->json(['success' => false, 'errors' => [__('Unauthenticated')], 'message' => __('Unauthenticated')], 401);
         }
 
         return redirect('/login'); // for normal routes
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($request->is('api/*')) {
+            return response()->json([
+                'success'   => false,
+                'errors'    => [__('Server Error')],
+                'message'   => $e->getMessage(),
+            ], 500);
+        }
+
+        return parent::render($request, $e);
     }
 }
