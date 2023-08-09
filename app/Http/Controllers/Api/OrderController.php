@@ -23,6 +23,7 @@ class OrderController extends BaseController
     {
         Log::info("start store ticket");
         Log::info(print_r($request->all(), true));
+
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|numeric',
             'floor_id'   => 'required|numeric',
@@ -105,10 +106,13 @@ class OrderController extends BaseController
 
     public function storeSupply(Request $request)
     {
+        Log::info("start store ticket");
+        Log::info(print_r($request->all(), true));
+
         $validator = Validator::make($request->all(), [
             'company_id'    => 'required|numeric',
             'notes'         => 'sometimes|nullable|string',
-            'supplies'      => 'required'
+            'supplies'      => 'required|array'
         ]);
 
         if ($validator->fails())
@@ -205,9 +209,6 @@ class OrderController extends BaseController
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')]);
 
         $order = Ticket::with('user', 'company')->find($id);
-
-        Log::info("Order: ");
-        Log::info(print_r($order, true));
 
         if(!$order)
             return $this->sendError(__('Not Found Order!'), [__('s_notFoundOrder')]);
