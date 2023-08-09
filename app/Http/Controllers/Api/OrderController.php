@@ -29,7 +29,7 @@ class OrderController extends BaseController
             'floor_id'   => 'required|numeric',
             'path_id'    => 'required|numeric',
             'office_id'  => 'required|numeric',
-            'contents'   => 'required|array',
+            'contents'   => 'required',
             'notes'      => 'sometimes|nullable|string',
         ]);
 
@@ -52,7 +52,7 @@ class OrderController extends BaseController
             foreach ($data['contents'] as $content) {
                 TicketData::create([
                     'ticket_id'     => $ticket->id,
-                    'content_id'    => $content,
+                    'content_id'    => $content['id'],
                 ]);
             }
 //            for ($i = 0;$i < count($data['contents']);$i++) {
