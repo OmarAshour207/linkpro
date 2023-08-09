@@ -49,12 +49,15 @@ class OrderController extends BaseController
         Log::info("Finish adding to db");
 
         if (isset($data['contents'])) {
-            for ($i = 0;$i < count($data['contents']);$i++) {
+            foreach ($data['contents'] as $content) {
                 TicketData::create([
                     'ticket_id'     => $ticket->id,
-                    'content_id'    => $data['contents'][$i],
+                    'content_id'    => $content,
                 ]);
             }
+//            for ($i = 0;$i < count($data['contents']);$i++) {
+//
+//            }
         }
         Log::info("Finish adding tickets data db");
 
