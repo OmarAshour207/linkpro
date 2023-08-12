@@ -55,3 +55,17 @@ function sendNotification($data)
 
     return true;
 }
+
+function saveActivity($data): bool
+{
+    $ticketId = $data['ticket_id'];
+    $activity = $data['activity'];
+
+    \App\Models\Activity::create([
+        'user_id'       => auth()->user()->id,
+        'ticket_id'     => $ticketId,
+        'activity'      => $activity
+    ]);
+
+    return true;
+}

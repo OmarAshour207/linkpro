@@ -130,6 +130,9 @@ class TicketController extends Controller
         if ($data['status'] == 2 && $ticket->status != 2)
             $data['status_updated_at'] = Carbon::now();
 
+        if($data['status'] != $ticket->status && ($data['status'] == 4 || $data['status'] == 2))
+            saveActivity(array('activity' => __('changed Status for') . ' ' . ($data['status'] == 2 ? __('Under Processing') : __('Rejected')) , 'ticket_id' => $ticket->id));
+
         $ticket->update($data);
         session()->flash('success', __('Saved successfully'));
         return redirect()->route('tickets.index');

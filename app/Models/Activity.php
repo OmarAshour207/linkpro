@@ -11,16 +11,15 @@ class Activity extends Model
 
     protected $fillable = [
         'ticket_id',
-        'responsible_id',
-        'type',
-        'comment'
+        'user_id',
+        'activity'
     ];
 
     // relations
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'responsible_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function ticket()

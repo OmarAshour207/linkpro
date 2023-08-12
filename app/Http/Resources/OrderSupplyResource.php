@@ -20,7 +20,8 @@ class OrderSupplyResource extends JsonResource
             'updated_at'=> $this->updated_at,
             'company'   => new SampleCompanyResource($this->company),
             'supplies'  => TicketDataSupplyResource::collection($this->ticketData),
-            'comments'  => CommentResource::collection($this->comments)
+            'comments'  => CommentResource::collection($this->comments),
+            'activities'=> ActivityResource::collection($this->activities)
         ];
     }
 }

@@ -62,6 +62,11 @@ class Ticket extends Model
         return $this->hasMany(Comment::class, 'ticket_id');
     }
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'ticket_id');
+    }
+
     // Scopes
 
     public function scopeWhenSearch($query, $search)

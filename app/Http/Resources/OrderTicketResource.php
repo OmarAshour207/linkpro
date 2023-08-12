@@ -22,7 +22,8 @@ class OrderTicketResource extends JsonResource
             'path'    => new SamplePathResource($this->path),
             'office'  => new SampleOfficeResource($this->office),
             'ticket_data'   => TicketDataTicketResource::collection($this->ticketData),
-            'comments'      => CommentResource::collection($this->comments)
+            'comments'      => CommentResource::collection($this->comments),
+            'activities'=> ActivityResource::collection($this->activities)
         ];
     }
 }

@@ -211,6 +211,9 @@ class OrderController extends BaseController
                 return $this->sendError(__('Unauthorized'), ['s_unauthorized'], 401);
         }
 
+        if($data['status'] != $order->status && ($data['status'] == 4 || $data['status'] == 2))
+            saveActivity(array('activity' => __('changed Status for') . ' ' . ($data['status'] == 2 ? __('Under Processing') : __('Rejected')) , 'ticket_id' => $order->id));
+
         $order->update($validator->validated());
 
         $result = [];

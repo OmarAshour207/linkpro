@@ -16,12 +16,13 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('responsible_id');
-            $table->foreign('responsible_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->string('type');
+            $table->unsignedBigInteger('ticket_id');
+            $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
 
-            $table->string('comment')->nullable();
+            $table->string('activity');
 
             $table->timestamps();
         });
