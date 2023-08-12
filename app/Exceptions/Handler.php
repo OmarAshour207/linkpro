@@ -55,9 +55,9 @@ class Handler extends ExceptionHandler
         if ($request->is('api/*')) {
             return response()->json([
                 'success'   => false,
-                'errors'    => [__('Server Error')],
+                'errors'    => [$e->getMessage() == 'Unauthenticated.' ? __('Unauthenticated') : __('Server Error')],
                 'message'   => $e->getMessage(),
-            ], 500);
+            ], $e->getMessage() == 'Unauthenticated.' ? 200 : 500);
         }
 
         return parent::render($request, $e);
