@@ -137,23 +137,29 @@ class OrderController extends BaseController
     public function get()
     {
         $companyId = [];
+        $roles = ['company', 'supervisor', 'admin', 'user'];
+        $role = auth()->user()->role;
 
-        if(auth()->user()->role == 'company')
+        if(!in_array($role, $roles))
+            return $this->sendResponse([], __('Empty Order'));
+
+        if($role == 'company')
             $companyId = [auth()->user()->id];
-        elseif (auth()->user()->role == 'supervisor') {
+        elseif ($role == 'supervisor') {
             $companyId = User::where('supervisor_id', auth()->user()->id)->pluck('id');
-        } elseif (auth()->user()->role == 'admin') {
-            $companyId = User::whereRole('company')->pluck('id');
         }
+//        elseif (auth()->user()->role == 'admin') {
+//            $companyId = User::whereRole('company')->pluck('id');
+//        }
 
-        // check here
         $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'ticketData', 'service', 'user'])
             ->whereIn('type', ['ticket', 'supply', 'request'])
-            ->when(count($companyId) && auth()->user()->role != 'admin', function ($query) use ($companyId) {
+            // if company or supervisor
+            ->when(count($companyId), function ($query) use ($companyId) {
                 return $query->whereIn('company_id', $companyId);
             })
-            ->when(auth()->user()->role != 'admin', function ($query) {
-                return $query->orWhere('user_id', auth()->user()->id);
+            ->when($role == 'user', function ($query) {
+                return $query->where('user_id', auth()->user()->id);
             })
             ->paginate(60)
             ->groupBy(function ($data) {
