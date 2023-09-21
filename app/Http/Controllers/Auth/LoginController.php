@@ -44,6 +44,11 @@ class LoginController extends Controller
         return filter_var(request()->get('email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phonenumber';
     }
 
+    protected function loggedOut(Request $request)
+    {
+        return redirect()->route('login');
+    }
+
     public function showLoginForm()
     {
         return view('dashboard.login');

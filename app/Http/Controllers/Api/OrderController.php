@@ -155,7 +155,7 @@ class OrderController extends BaseController
         $tickets = Ticket::with(['company', 'floor', 'path', 'office', 'ticketData', 'service', 'user'])
             ->whereIn('type', ['ticket', 'supply', 'request'])
             // if company or supervisor
-            ->when(count($companyId), function ($query) use ($companyId) {
+            ->when($role == 'company' || $role == 'supervisor', function ($query) use ($companyId) {
                 return $query->whereIn('company_id', $companyId);
             })
             ->when($role == 'user', function ($query) {

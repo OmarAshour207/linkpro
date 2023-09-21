@@ -40,7 +40,7 @@
                 <td style="width: 400px;">
                     <div class="media align-items-center">
                         <div class="media-body">
-                            <input id="unit" name="supplies[{{ $index }}][unit]" type="text" class="form-control" placeholder="{{ __('Unit') }}">
+                            <input id="unit" name="supplies[{{ $index }}][unit]" type="text" value="{{ $supply->unit }}" class="form-control" placeholder="{{ __('Unit') }}" disabled>
                         </div>
                     </div>
                 </td>

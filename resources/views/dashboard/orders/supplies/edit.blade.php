@@ -83,11 +83,11 @@
                                             <i class="fa fa-clock"></i>
                                         </label>
                                         <label class="text-label" for="prepare_time">{{ __('Prepare Time in Minutes') }}</label>
-                                        @if($ticket->prepare_time)
-                                            <input value="{{ $ticket->prepare_time }}" class="form-control" disabled>
-                                        @else
+{{--                                        @if($ticket->prepare_time)--}}
+{{--                                            <input value="{{ $ticket->prepare_time }}" class="form-control" disabled>--}}
+{{--                                        @else--}}
                                             <input id="prepare_time" name="prepare_time" value="{{ old('prepare_time', $ticket->prepare_time) }}" type="number" class="form-control" placeholder="{{ __('Prepare Time in Minutes') }}">
-                                        @endif
+{{--                                        @endif--}}
 
                                     </div>
                                 </div>
@@ -142,7 +142,8 @@
                                                 <td style="width: 400px;">
                                                     <div class="media align-items-center">
                                                         <div class="media-body">
-                                                            <input id="unit" name="supplies[{{ $index }}][unit]" value="{{ key_exists($supply->id, $suppliesIds) ? $suppliesIds[$supply->id]['unit'] : '' }}" type="text" class="form-control" placeholder="{{ __('Unit') }}">
+{{--                                                            <input id="unit" name="supplies[{{ $index }}][unit]" value="{{ key_exists($supply->id, $suppliesIds) ? $suppliesIds[$supply->id]['unit'] : '' }}" type="text" class="form-control" placeholder="{{ __('Unit') }}">--}}
+                                                            <input id="unit" name="supplies[{{ $index }}][unit]" value="{{ $supply->unit }}" type="text" class="form-control" placeholder="{{ __('Unit') }}">
                                                         </div>
                                                     </div>
                                                 </td>
