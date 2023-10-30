@@ -111,11 +111,11 @@ class CompanyController extends Controller
 
         if ($request->image) {
             $image = Media::where('id', $request->image)->first();
-            File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
-            File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
-//            File::move(storage_path('app/public/temp/users/' . $image->name), storage_path('app/public/users/' . $image->name));
-//            File::move(storage_path('app/public/temp/users/thumb_' . $image->name), storage_path('app/public/users/thumb_' . $image->name));
-            $data['image'] = $image->name;
+            if ($image) {
+                File::move(public_path('uploads/temp/users/' . $image->name), public_path('uploads/users/' . $image->name));
+                File::move(public_path('uploads/temp/users/thumb_' . $image->name), public_path('uploads/users/thumb_' . $image->name));
+                $data['image'] = $image->name;
+            }
         } else {
             unset($data['image']);
         }
